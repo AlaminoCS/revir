@@ -6,6 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { AuthService, LoginRequest, LoginResponse } from '../../../core/application/auth';
+import { catchError, tap } from 'rxjs';
 
 
 @Component({
@@ -24,25 +26,35 @@ import { Router } from '@angular/router';
 })
 export class Login {
   // Dados do formulário
-  protected username = '';
-  protected password = '';
-  protected errorMessage = '';
+  username = '';
+  password = '';
+  errorMessage = '';
+  hidePassword = true;
 
-  // Credenciais mockadas
-  private readonly MOCK_USER = 'cleide';
-  private readonly MOCK_PASS = 'revir321$';
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
-  protected hidePassword = true;
+  onSubmit(): void {
+    const credentials: LoginRequest = {
+      username: this.username,
+      password: this.password
+    };
 
-  constructor(private router: Router) {}
+    this.authService.login(credentials).pipe(
+      tap((response: LoginResponse) => {
+        // Simular armazenamento do token
+        localStorage.setItem('authToken', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
 
-  protected onSubmit(): void {
-    if (this.username === this.MOCK_USER && this.password === this.MOCK_PASS) {
-      // Login bem-sucedido (simulado)
-      this.errorMessage = '';
-      this.router.navigate(['/sales']);
-    } else {
-      this.errorMessage = 'Usuário ou senha incorretos';
-    }
+        this.router.navigate(['/sales']);
+      }),
+      catchError((error) => {
+        this.errorMessage = 'Usuário ou senha inválidos';
+        throw error;
+      })
+    ).subscribe();
   }
+
 }
