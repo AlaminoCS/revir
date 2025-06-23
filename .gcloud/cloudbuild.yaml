@@ -4,10 +4,10 @@ steps:
     dir: 'backend'
     args: ['npm', 'install']
 
-  # Build do backend
+  # Build do backend (se tiver build)
   - name: 'node:18'
     dir: 'backend'
-    args: ['npm', 'run', 'build']
+    args: ['npm', 'run', 'build']  # Se tiver script "build"
 
   # Deploy do backend no Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -45,4 +45,8 @@ steps:
     args:
       - '-c'
       - |
-        gsutil -m acl ch -u AllUsers:R gs://poc-revir-angular-app/**
+
+
+# Adicione esta seção para configurar os logs
+options:
+  logging: CLOUD_LOGGING_ONLY
