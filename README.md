@@ -58,7 +58,7 @@ npm run build
 ### Página de Login
 - Validação de credenciais mockadas:
   ```ts
-  { usuário: "cleide", senha: "revir321$" }
+  { usuário: "xxxx", senha: "xxxx" }
   ```
 - Features:
   - Toggle de visibilidade de senha (👁️)
