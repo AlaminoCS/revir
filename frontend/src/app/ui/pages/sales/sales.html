@@ -1,0 +1,13 @@
+<main class="sales-container">
+  <app-page-header 
+    greeting="Cleide" 
+    title="Bem vinda" 
+    [showSaleButtons]="true"
+    (onNewSale)="handleNewSale()"
+    (onClosing)="handleClosing()"
+  />
+  
+  @if (showSalesForm) {
+    <app-sales-form (closeForm)="closeSalesForm()" />
+  }
+</main>

@@ -1,0 +1,27 @@
+<!-- src/app/ui/molecules/page-header/page-header.html -->
+<div class="page-header">
+  @if (greeting) {
+    <p class="greeting">Olá, {{ greeting }}</p>
+  }
+  
+  <h1>{{ title }}</h1>
+
+  @if (showSaleButtons) {
+    <div class="actions">
+      <button 
+        mat-raised-button 
+        class="action-button"
+        (click)="onNewSale.emit()"
+      >
+        Nova Venda
+      </button>
+      <button 
+        mat-raised-button 
+        class="action-button"
+        (click)="onClosing.emit()"
+      >
+        Fechamento
+      </button>
+    </div>
+  }
+</div>

@@ -1,0 +1,35 @@
+/* src/app/ui/molecules/page-header/page-header.scss */
+.page-header {
+  margin-bottom: 2rem;
+
+  .greeting {
+    color: #666;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+  }
+
+  h1 {
+    color: #333;
+    margin: 0 0 1.5rem 0;
+    font-size: 2rem;
+  }
+
+  .actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+
+    .action-button {
+      font-family: 'Source Sans Pro', sans-serif;
+      font-weight: 600;
+      color: #000000;
+      border-radius: 20px;
+      transition: all 0.3s;
+
+      &:hover {
+        background-color: #004aad !important;
+        color: #ffffff !important;
+      }
+    }
+  }
+}

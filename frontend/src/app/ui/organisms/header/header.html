@@ -1,0 +1,26 @@
+<mat-toolbar class="header">
+  <!-- Logo -->
+  <div class="logo">
+    <mat-icon>storefront</mat-icon>
+    <span>Revir</span>
+  </div>
+
+  <!-- Menu -->
+  <nav class="menu">
+    @for (item of menuItems; track item.name) {
+      <a 
+        mat-button 
+        [routerLink]="item.route" 
+        class="menu-item"
+      >
+        {{ item.name }}
+      </a>
+    }
+  </nav>
+
+  <!-- Usuário -->
+  <div class="user-welcome">
+    <mat-icon>account_circle</mat-icon>
+    <span>Seja bem-vinda, Cleide</span>
+  </div>
+</mat-toolbar>

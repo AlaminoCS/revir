@@ -5,6 +5,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-login',
@@ -30,13 +32,15 @@ export class Login {
   private readonly MOCK_USER = 'cleide';
   private readonly MOCK_PASS = 'revir321$';
 
-   protected hidePassword = true;
+  protected hidePassword = true;
+
+  constructor(private router: Router) {}
 
   protected onSubmit(): void {
     if (this.username === this.MOCK_USER && this.password === this.MOCK_PASS) {
       // Login bem-sucedido (simulado)
       this.errorMessage = '';
-      alert('Login bem-sucedido!'); // Pode substituir por navegação
+      this.router.navigate(['/sales']);
     } else {
       this.errorMessage = 'Usuário ou senha incorretos';
     }
