@@ -1,58 +1,4 @@
-# Revir - Frontend
 
-## 📋 Visão Geral
-Aplicação Angular para gestão [insira propósito do projeto aqui].  
-**Stack**: Angular 17+, Material UI, Arquitetura Limpa + Atomic Design.
-
----
-
-## 🏗️ Arquitetura
-### Estrutura Híbrida
-
-src/app/
-│
-├── core/ # Camada de domínio (Clean Architecture)
-│ ├── application/ # Casos de uso e serviços
-│ ├── domain/ # Modelos e interfaces
-│ └── infrastructure/ # Implementações concretas
-│
-├── ports/ # Portas e adaptadores (Hexagonal)
-│ ├── input/ # Portas de entrada
-│ └── output/ # Portas de saída
-│
-├── ui/ # Atomic Design
-│ ├── atoms/ # Componentes mínimos (buttons, inputs)
-│ ├── molecules/ # Combinações (forms, cards)
-│ ├── organisms/ # Componentes complexos
-│ ├── templates/ # Layouts estruturais
-│ └── pages/ # Páginas/rotas (ex: login)
-│
-└── shared/ # Utilitários
-├── pipes/ # Pipes Angular
-└── directives/ # Diretivas customizadas
-
-
-### Princípios Adotados
-- **Clean Architecture**: Separação clara entre regras de negócio e detalhes técnicos
-- **Atomic Design**: Componentização progressiva para reúso máximo
-- **Standalone Components**: Angular 17+ sem NgModule
-
----
-
-## 🚀 Execução
-```bash
-# Instalar dependências
-npm install
-
-# Servidor de desenvolvimento
-npm start
-
-# Build para produção
-npm run build
-
-Ótima ideia! Vou criar um `README.md` completo documentando a arquitetura, decisões técnicas e como executar o projeto. Aqui está o conteúdo sugerido:
-
-```markdown
 # Revir - Frontend
 
 ## 📋 Visão Geral
@@ -145,12 +91,3 @@ npm run build
 3. Commit suas mudanças (`git commit -m 'Add nova funcionalidade'`)
 4. Push para a branch (`git push origin feature/nova-funcionalidade`)
 5. Abra um Pull Request
-```
-
-### Pontos-chave destacados:
-1. **Diagrama visual** da arquitetura híbrida
-2. **Instruções de execução** claras
-3. **Mock de login** documentado
-4. **Roadmap** para próximas features
-5. **Guia de contribuição** padrão
-
