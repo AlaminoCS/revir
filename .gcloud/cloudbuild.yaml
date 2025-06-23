@@ -21,7 +21,6 @@ steps:
           --allow-unauthenticated \
           --project poc-revir
 
-
   # Opcional: Frontend (descomente quando for implementar)
   # - name: 'node:18'
   #   dir: 'frontend'
