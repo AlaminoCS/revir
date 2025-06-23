@@ -39,14 +39,13 @@ steps:
       - |
         gsutil -m rsync -r frontend/dist/frontend gs://poc-revir-angular-app
 
-  # Torna os arquivos públicos
+  # Permite acesso público aos arquivos do bucket (usando IAM)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        gsutil -m acl ch -r -u AllUsers:R gs://poc-revir-angular-app
-
+        gsutil iam ch allUsers:objectViewer gs://poc-revir-angular-app
 
 # Adicione esta seção para configurar os logs
 options:
