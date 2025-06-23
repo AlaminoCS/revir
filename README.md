@@ -1,6 +1,3 @@
-
-
-```markdown
 # Revir - Frontend
 
 ## 📋 Visão Geral
@@ -102,14 +99,3 @@ http://localhost:4200
 
 ## 📄 Licença
 [MIT](https://choosealicense.com/licenses/mit/)
-```
-
-### Melhorias realizadas:
-1. Adicionada seção de arquitetura com diagrama
-2. Listagem das funcionalidades implementadas
-3. Organização mais clara das dependências
-4. Roadmap de próximas implementações
-5. Guia de contribuição padronizado
-6. Informações mais específicas sobre o projeto
-
-Quer que eu adicione ou ajuste alguma informação específica sobre o projeto?
