@@ -21,18 +21,6 @@ steps:
           --allow-unauthenticated \
           --project poc-revir
 
-  # Opcional: Frontend (descomente quando for implementar)
-  # - name: 'node:18'
-  #   dir: 'frontend'
-  #   args: ['npm', 'install']
-  # - name: 'node:18'
-  #   dir: 'frontend'
-  #   args: ['ng', 'build', '--prod']
-  # - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  #   entrypoint: 'bash'
-  #   args:
-  #     - '-c'
-  #     - |
-  #       gsutil cp -r frontend/dist/frontend/* gs://<seu-bucket>/public/
-
-# timeout: '1200s' # Tempo máximo de execução (ajuste conforme necessário)
+# Adicione esta seção para configurar os logs
+options:
+  logging: CLOUD_LOGGING_ONLY
