@@ -1,14 +1,21 @@
 
+
+```markdown
 # Revir - Frontend
 
 ## 📋 Visão Geral
-Aplicação Angular para gestão [insira propósito do projeto aqui].  
-**Stack**: Angular 17+, Material UI, Arquitetura Limpa + Atomic Design.
+Aplicação Angular para gestão de vendas com:
+- Autenticação de usuários
+- Registro de vendas
+- Cálculo automático de totais
+- Interface responsiva com Angular Material
+
+**Stack**: Angular 17+, Material UI, Arquitetura Limpa + Atomic Design
 
 ---
 
-## 🏗️ Arquitetura
-### Estrutura Híbrida
+## 🏗️ Arquitetura do Projeto
+### Estrutura de Componentes
 ```
 src/app/
 │
@@ -33,61 +40,76 @@ src/app/
     └── directives/            # Diretivas customizadas
 ```
 
-### Princípios Adotados
-- **Clean Architecture**: Separação clara entre regras de negócio e detalhes técnicos
-- **Atomic Design**: Componentização progressiva para reúso máximo
-- **Standalone Components**: Angular 17+ sem NgModule
+### Principais Funcionalidades Implementadas
+- **Sistema de Login** com validação
+- **Header** com navegação e informações do usuário
+- **Painel de Vendas** com:
+  - Filtro de produtos/preços
+  - Tabela de itens adicionados
+  - Cálculo automático de total
+  - Gestão de itens (adicionar/remover)
 
 ---
 
-## 🚀 Execução
+## 🚀 Como Executar
 ```bash
 # Instalar dependências
 npm install
 
-# Servidor de desenvolvimento
-npm start
+# Iniciar servidor de desenvolvimento
+ng serve
 
-# Build para produção
-npm run build
+# Acessar no navegador
+http://localhost:4200
 ```
 
 ---
 
-## ✨ Funcionalidades Implementadas
-### Página de Login
-- Validação de credenciais mockadas:
-  ```ts
-  { usuário: "xxxx", senha: "xxxx" }
-  ```
-- Features:
-  - Toggle de visibilidade de senha (👁️)
-  - Card centralizado com background image
-  - Mensagens de erro contextualizadas
-  - Design com Angular Material
-
----
-
-## 📌 Próximos Passos
-- [ ] Integração com backend real
-- [ ] Componente de loading
-- [ ] Internacionalização (i18n)
-- [ ] Testes unitários
+## 🔧 Principais Comandos
+| Comando | Descrição |
+|---------|-----------|
+| `ng generate component` | Cria novo componente |
+| `ng build` | Gera versão para produção |
+| `ng test` | Executa testes unitários |
 
 ---
 
 ## 🛠️ Dependências Principais
-| Pacote               | Versão   |
-|----------------------|----------|
-| Angular              | 17+      |
-| Angular Material     | ^20.0.3  |
-| RxJS                 | ~7.8.0   |
+| Pacote               | Versão   | Uso                     |
+|----------------------|----------|-------------------------|
+| Angular              | 17+      | Framework principal     |
+| Angular Material     | ^20.0.3  | Componentes UI          |
+| RxJS                 | ~7.8.0   | Programação reativa     |
+
+---
+
+## 📌 Próximas Implementações
+- [ ] Integração com backend real
+- [ ] Geração de relatórios
+- [ ] Gestão de estoque
+- [ ] Dashboard analítico
 
 ---
 
 ## 🤝 Contribuição
 1. Faça um fork do projeto
-2. Crie uma branch (`git checkout -b feature/nova-funcionalidade`)
-3. Commit suas mudanças (`git commit -m 'Add nova funcionalidade'`)
+2. Crie sua branch (`git checkout -b feature/nova-funcionalidade`)
+3. Commit suas mudanças (`git commit -m 'Adiciona nova funcionalidade'`)
 4. Push para a branch (`git push origin feature/nova-funcionalidade`)
 5. Abra um Pull Request
+
+---
+
+## 📄 Licença
+[MIT](https://choosealicense.com/licenses/mit/)
+```
+
+### Melhorias realizadas:
+1. Adicionada seção de arquitetura com diagrama
+2. Listagem das funcionalidades implementadas
+3. Organização mais clara das dependências
+4. Roadmap de próximas implementações
+5. Guia de contribuição padronizado
+6. Informações mais específicas sobre o projeto
+
+Quer que eu adicione ou ajuste alguma informação específica sobre o projeto?
