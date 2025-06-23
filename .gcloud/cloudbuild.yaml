@@ -4,10 +4,10 @@ steps:
     dir: 'backend'
     args: ['npm', 'install']
 
-  # Build do backend (se tiver build)
+  # Build do backend
   - name: 'node:18'
     dir: 'backend'
-    args: ['npm', 'run', 'build']  # Se tiver script "build"
+    args: ['npm', 'run', 'build']
 
   # Deploy do backend no Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -21,6 +21,28 @@ steps:
           --allow-unauthenticated \
           --project poc-revir
 
-# Adicione esta seção para configurar os logs
-options:
-  logging: CLOUD_LOGGING_ONLY
+  # Instala dependências do frontend
+  - name: 'node:18'
+    dir: 'frontend'
+    args: ['npm', 'install']
+
+  # Build do frontend Angular
+  - name: 'node:18'
+    dir: 'frontend'
+    args: ['npm', 'run', 'build']
+
+  # Copia arquivos buildados para o bucket
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gsutil -m rsync -r frontend/dist/frontend gs://poc-revir-angular-app
+
+  # Torna os arquivos públicos
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gsutil -m acl ch -u AllUsers:R gs://poc-revir-angular-app/**
