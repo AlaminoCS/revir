@@ -45,6 +45,7 @@ steps:
     args:
       - '-c'
       - |
+        gsutil -m acl ch -r -u AllUsers:R gs://poc-revir-angular-app
 
 
 # Adicione esta seção para configurar os logs
