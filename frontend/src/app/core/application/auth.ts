@@ -19,7 +19,9 @@ export interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly API_URL = 'http://localhost:3001/api/auth/login';
+  private url: string = 'https://revir-backend-737175867232.us-central1.run.app';
+  private readonly API_URL = `${this.url}/api/auth/login`;
+  
 
   constructor(private http: HttpClient) {}
 
