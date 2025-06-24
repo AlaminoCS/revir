@@ -23,6 +23,11 @@ jobs:
           cd frontend
           npm install
 
+      - name: Instalar Angular CLI globalmente
+        run: |
+          cd frontend
+          npm install -g @angular/cli
+
       - name: Build do projeto Angular
         run: |
           cd frontend
@@ -37,3 +42,5 @@ jobs:
         run: |
           cd frontend
           vercel deploy --prod --token=$VERCEL_TOKEN --yes
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
