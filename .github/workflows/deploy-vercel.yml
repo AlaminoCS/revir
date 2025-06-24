@@ -18,25 +18,19 @@ jobs:
         with:
           node-version: 20.x
 
+      - name: Instalar Angular CLI globalmente
+        run: |
+          npm install -g @angular/cli vercel
+
       - name: Instalar dependências do frontend
         run: |
           cd frontend
           npm install
 
-      - name: Instalar Angular CLI globalmente
-        run: |
-          cd frontend
-          npm install -g @angular/cli
-
       - name: Build do projeto Angular
         run: |
           cd frontend
           ng build --configuration=production
-
-      - name: Instalar Vercel CLI
-        run: |
-          cd frontend
-          npm install -g vercel --force
 
       - name: Fazer deploy no Vercel
         run: |
