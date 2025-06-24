@@ -1,0 +1,41 @@
+name: Deploy Frontend no Vercel
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+
+      - name: Instalar dependências do frontend
+        run: |
+          cd frontend
+          npm install
+
+      - name: Build do projeto Angular
+        run: |
+          cd frontend
+          npm run build -- --configuration=production
+
+      - name: Instalar Vercel CLI e fazer login
+        run: |
+          cd frontend
+          npm install -g vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+      - name: Fazer deploy no Vercel
+        run: |
+          cd frontend
+          vercel --prod --token=$VERCEL_TOKEN
