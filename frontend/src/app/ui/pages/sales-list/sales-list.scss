@@ -7,13 +7,23 @@
     color: #333;
   }
 
+  // Container com rolagem horizontal
   table {
     width: 100%;
     border: 1px solid #e0e0e0;
-  }
+    overflow-x: auto;
+    display: block; // Permite scroll horizontal em telas pequenas
 
-  th {
-    background-color: #f5f5f5;
+    th,
+    td {
+      white-space: nowrap; // Impede quebra de texto
+      padding: 8px 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f5f5f5;
+    }
   }
 
   .product-list {
@@ -28,5 +38,17 @@
 
   button {
     margin-top: 1rem;
+  }
+
+  @media (max-width: 600px) {
+    padding: 1rem;
+
+    h2 {
+      font-size: 1.25rem;
+    }
+
+    button {
+      width: 100%;
+    }
   }
 }

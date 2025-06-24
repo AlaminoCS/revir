@@ -20,14 +20,26 @@
   .form-content {
     display: flex;
     gap: 20px;
+    flex-direction: column;
 
-    .left-column, .right-column {
-      flex: 1;
+    .left-column,
+    .right-column {
+      width: 100%;
     }
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+
+      .left-column,
+      .right-column {
+        flex: 1;
+      }
+    }
+    
 
     .price-buttons {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
       gap: 10px;
       margin-top: 20px;
 
@@ -71,16 +83,23 @@
 
 .products-table {
   width: 100%;
-  background: white;
-  border: 1px solid #ccc;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 
-  th, td {
-    padding: 8px;
+  table {
+    min-width: 300px;
+  }
+
+  th,
+  td {
+    white-space: nowrap;
+    padding: 8px 12px;
   }
 }
- 
+
 .action-buttons {
   display: flex;
+  flex-wrap: wrap; // Permite que os botões quebrem linha
   justify-content: flex-end;
   gap: 10px;
   margin-top: 20px;
@@ -89,22 +108,35 @@
     font-family: 'Source Sans Pro', sans-serif;
     font-weight: 600;
     color: white !important;
-    
+    flex: 1 1 100%; // Em telas pequenas, cada botão ocupa 100% da largura
+
     &:hover {
       opacity: 0.9;
+    }
+
+    @media (min-width: 500px) {
+      flex: 1 1 48%; // Dois botões por linha
+    }
+
+    @media (min-width: 768px) {
+      flex: none; // Volta ao normal em desktop
     }
   }
 
   .cancel-button {
-    background-color: #f44336 !important; // Vermelho
+    background-color: #f44336 !important;
   }
 
   .discount-button {
-    background-color: #ffc107 !important; // Amarelo
-    color: #000 !important; // Texto preto para melhor contraste
+    background-color: #ffc107 !important;
+    color: #000 !important;
   }
 
   .checkout-button {
-    background-color: #4CAF50 !important; // Verde
+    background-color: #4CAF50 !important;
   }
+}
+
+.mat-form-field {
+  width: 100%;
 }
