@@ -1,9 +1,8 @@
-<!-- src/app/ui/molecules/page-header/page-header.html -->
 <div class="page-header">
   @if (greeting) {
-    <p class="greeting">Olá, {{ greeting }}</p>
+    <p class="greeting">{{ greeting }}</p>
   }
-  
+
   <h1>{{ title }}</h1>
 
   @if (showSaleButtons) {
@@ -15,6 +14,9 @@
       >
         Nova Venda
       </button>
+
+      
+
       <button 
         mat-raised-button 
         class="action-button"

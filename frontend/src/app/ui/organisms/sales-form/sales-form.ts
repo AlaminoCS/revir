@@ -5,6 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
+import { Product, Sale } from '../../../core/domain/models';
+import { SalesService } from '../../../core/application/sales.service';
 
 @Component({
   selector: 'app-sales-form',
@@ -29,7 +31,9 @@ export class SalesForm {
   selectedProducts: {name: string, price: number}[] = [];
   
   displayedColumns: string[] = ['product', 'price', 'actions'];
-  
+
+  constructor(private salesService: SalesService) {}
+
   get total(): number {
     return this.selectedProducts.reduce((sum, product) => sum + product.price, 0);
   }
@@ -50,13 +54,10 @@ export class SalesForm {
       name: `Peça R$ ${price.toFixed(2)}`,
       price: price
     };
-
     this.selectedProducts = [...this.selectedProducts, product]; 
-
     this.searchTerm = '';
     this.filteredPrices = [...this.priceButtons];
   }
-
 
   removeProduct(index: number): void {
     const updated = [...this.selectedProducts];
@@ -70,7 +71,6 @@ export class SalesForm {
   }
 
   onDiscount(): void {
-    // Lógica de desconto será implementada aqui
     alert('Funcionalidade de desconto será implementada em breve!');
   }
 
@@ -79,7 +79,23 @@ export class SalesForm {
       alert('Adicione produtos antes de fechar a venda!');
       return;
     }
-    alert(`Venda finalizada! Total: R$ ${this.total.toFixed(2)}`);
-    this.selectedProducts = [];
+
+    console.log('Produtos selecionados:', this.selectedProducts);
+
+    const sale: { products: { name: string; price: number }[], total: number } = {
+      products: this.selectedProducts,
+      total: this.total
+    };
+
+    this.salesService.registerSale(sale).subscribe(
+      () => {
+        alert('Venda registrada com sucesso!');
+        this.selectedProducts = [];
+      },
+      (error) => {
+        console.error('Erro ao registrar venda:', error);
+        alert('Erro ao salvar venda. Tente novamente.');
+      }
+    );
   }
 }
