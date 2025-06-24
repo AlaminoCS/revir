@@ -63,4 +63,23 @@ export class SalesForm {
     updated.splice(index, 1);
     this.selectedProducts = updated; 
   }
+
+  onCancel(): void {
+    this.selectedProducts = [];
+    this.closeForm.emit();
+  }
+
+  onDiscount(): void {
+    // Lógica de desconto será implementada aqui
+    alert('Funcionalidade de desconto será implementada em breve!');
+  }
+
+  onCheckout(): void {
+    if (this.selectedProducts.length === 0) {
+      alert('Adicione produtos antes de fechar a venda!');
+      return;
+    }
+    alert(`Venda finalizada! Total: R$ ${this.total.toFixed(2)}`);
+    this.selectedProducts = [];
+  }
 }

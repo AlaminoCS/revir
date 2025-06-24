@@ -61,6 +61,32 @@
         <span>Total:</span>
         <span>R$ {{total.toFixed(2)}}</span>
       </div>
+
+      <div class="action-buttons">
+        <button 
+          mat-raised-button 
+          class="cancel-button"
+          (click)="onCancel()"
+        >
+          Cancelar
+        </button>
+        
+        <button 
+          mat-raised-button 
+          class="discount-button"
+          (click)="onDiscount()"
+        >
+          Desconto
+        </button>
+        
+        <button 
+          mat-raised-button 
+          class="checkout-button"
+          (click)="onCheckout()"
+        >
+          Fechar Venda
+        </button>
+      </div>
     </div>
   </div>
 </div>

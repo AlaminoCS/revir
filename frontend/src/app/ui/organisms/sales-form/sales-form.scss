@@ -79,3 +79,32 @@
   }
 }
  
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+
+  button {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 600;
+    color: white !important;
+    
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  .cancel-button {
+    background-color: #f44336 !important; // Vermelho
+  }
+
+  .discount-button {
+    background-color: #ffc107 !important; // Amarelo
+    color: #000 !important; // Texto preto para melhor contraste
+  }
+
+  .checkout-button {
+    background-color: #4CAF50 !important; // Verde
+  }
+}
