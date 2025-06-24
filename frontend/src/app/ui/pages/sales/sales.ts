@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { PageHeader } from '../../molecules/page-header/page-header';
 import { CommonModule } from '@angular/common';
 import { SalesForm } from '../../organisms/sales-form/sales-form';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sales',
@@ -13,12 +14,14 @@ import { SalesForm } from '../../organisms/sales-form/sales-form';
 export class Sales {
   showSalesForm = false;
 
+  constructor(private router: Router) {}
+
   handleNewSale() {
     this.showSalesForm = true;
   }
 
   handleClosing() {
-    console.log('Fechamento clicado');
+    this.router.navigate(['/sales-list']);
   }
 
   closeSalesForm() {

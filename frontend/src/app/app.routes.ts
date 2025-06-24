@@ -2,11 +2,11 @@
 import { Routes } from '@angular/router';
 import { Login } from './ui/pages/login/login';
 import { Sales } from './ui/pages/sales/sales';
-import { PurchaseSuccess } from './ui/pages/purchase-success/purchase-success';
+import { SalesList } from './ui/pages/sales-list/sales-list';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'sales', component: Sales },
-  { path: 'purchase-success', component: PurchaseSuccess },
+  { path: 'sales-list', component: SalesList },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 ];
