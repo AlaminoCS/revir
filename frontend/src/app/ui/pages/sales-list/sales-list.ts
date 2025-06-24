@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule, Router } from '@angular/router';
 import { SalesService, Sale } from '../../../core/application/sales.service';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-sales-list',
@@ -13,15 +14,25 @@ import { SalesService, Sale } from '../../../core/application/sales.service';
   styleUrls: ['./sales-list.scss']
 })
 export class SalesList {
-  sales: Sale[] = [];
+  dataSource = new MatTableDataSource<Sale>();
   displayedColumns: string[] = ['id', 'total', 'date', 'products'];
 
-  constructor(private salesService: SalesService, private router: Router) {}
+  constructor(
+    private salesService: SalesService, 
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
+    this.loadSales();
+  }
+
+  loadSales(): void {
     this.salesService.getSales().subscribe(
       (data: Sale[]) => {
-        this.sales = data;
+        console.log('Dados recebidos:', data);
+        this.dataSource = new MatTableDataSource(data);
+        this.cdr.detectChanges();
       },
       (error) => {
         console.error('Erro ao carregar vendas:', error);
