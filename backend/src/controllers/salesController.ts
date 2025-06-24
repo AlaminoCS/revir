@@ -1,7 +1,19 @@
 import { Request, Response } from 'express';
+import fs from 'fs';
+import path from 'path';
 
-// Armazenamento temporário em memória
-const salesList: any[] = [];
+const dbPath = path.resolve(__dirname, '../../data/db.json');
+
+// Função auxiliar para ler o DB
+function readDB(): any[] {
+  const data = fs.readFileSync(dbPath, 'utf-8');
+  return JSON.parse(data);
+}
+
+// Função auxiliar para escrever no DB
+function writeDB(data: any[]) {
+  fs.writeFileSync(dbPath, JSON.stringify(data, null, 2), 'utf-8');
+}
 
 export const registerSale = (req: Request, res: Response): void => {
   const { products, total } = req.body;
@@ -11,21 +23,21 @@ export const registerSale = (req: Request, res: Response): void => {
     return;
   }
 
-  const sale = {
+  const salesList = readDB();
+
+  const newSale = {
     id: salesList.length + 1,
     products,
     total,
     date: new Date().toISOString()
   };
 
-  salesList.push(sale);
+  writeDB([...salesList, newSale]);
 
-  res.status(201).json({
-    message: 'Venda registrada com sucesso!',
-    sale
-  });
+  res.status(201).json(newSale);
 };
 
 export const getSales = (req: Request, res: Response): void => {
-  res.status(200).json(salesList);
+  const sales = readDB();
+  res.status(200).json(sales);
 };
