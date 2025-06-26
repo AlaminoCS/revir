@@ -26,7 +26,7 @@ export class SalesForm {
   @Output() closeForm = new EventEmitter<void>();
   
   searchTerm = '';
-  priceButtons = [10, 15, 20, 25];
+  priceButtons = [10, 15, 20, 25, 30, 35, 40, 45, 55, 65, 75, 85, 95, 125, 135, 145, 155];
   filteredPrices = [...this.priceButtons];
   selectedProducts: {name: string, price: number}[] = [];
   
