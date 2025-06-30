@@ -41,7 +41,6 @@ export class SalesList {
       },
       (error) => {
         console.error('Erro ao carregar vendas:', error);
-        alert('Erro ao carregar as vendas.');
       }
     );
   }
