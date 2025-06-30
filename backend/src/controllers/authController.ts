@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 const MOCK_USER = {
   username: 'cleide',
   password: 'revir321$',
-  name: 'Cleide Silva'
+  name: 'Cleide'
 };
 
 export const login = (req: Request, res: Response): void => {
