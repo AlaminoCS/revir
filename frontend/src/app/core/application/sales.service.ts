@@ -21,7 +21,7 @@ export interface Sale {
   providedIn: 'root'
 })
 export class SalesService {
-  private readonly API_URL = 'http://localhost:3001/api/sales';
+  private readonly API_URL = 'https://backend-orcin-alpha-63.vercel.app/api/sales';
 
   constructor(private http: HttpClient) {}
 
