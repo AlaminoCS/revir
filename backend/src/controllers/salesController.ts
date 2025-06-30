@@ -2,10 +2,16 @@ import { Request, Response } from 'express';
 import { createClient } from '@supabase/supabase-js';
 
 // Configuração do Supabase (adicione essas variáveis no seu .env)
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_KEY!
-);
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error('Supabase credentials not configured!');
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey, {
+  auth: { persistSession: false } // Importante para serverless
+});
 
 console.log('Supabase URL:', process.env.SUPABASE_URL?.slice(0, 10) + '...');
 
