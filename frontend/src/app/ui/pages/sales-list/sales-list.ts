@@ -29,9 +29,14 @@ export class SalesList {
 
   loadSales(): void {
     this.salesService.getSales().subscribe(
-      (data: Sale[]) => {
-        console.log('Dados recebidos:', data);
-        this.dataSource = new MatTableDataSource(data);
+      (data: any[]) => {
+        // Transforma os dados se necessário
+        const formattedData = data.map(sale => ({
+          ...sale,
+          date: sale.created_at || sale.date
+        }));
+        
+        this.dataSource = new MatTableDataSource(formattedData);
         this.cdr.detectChanges();
       },
       (error) => {

@@ -1,15 +1,22 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes';
 import salesRoutes from './routes/salesRoutes';
 
-dotenv.config();
+
 
 const app = express();
 
 // Middlewares
-app.use(cors());
+app.use(cors({
+  origin: [
+    'https://frontend-six-mu-33.vercel.app',
+    'http://localhost:4200'
+  ]
+}));
 app.use(express.json());
 
 // Rotas
