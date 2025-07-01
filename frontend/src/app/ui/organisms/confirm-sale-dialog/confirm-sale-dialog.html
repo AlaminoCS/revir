@@ -1,0 +1,48 @@
+<div class="dialog-container">
+  <div class="dialog-header">
+    <h2 class="dialog-title">
+      <mat-icon class="dialog-icon">receipt</mat-icon>
+      Confirmação de Venda
+    </h2>
+  </div>
+
+  <div class="dialog-content">
+    <div class="sale-summary">
+      <h3 class="summary-title">Resumo da Venda</h3>
+      
+      <div class="products-section">
+        <h4 class="section-title">Produtos</h4>
+        <ul class="products-list">
+          <li *ngFor="let product of data.sale.products" class="product-item">
+            <span class="product-name">{{ product.name }}</span>
+            <span class="product-price">R$ {{ product.price | number:'1.2-2' }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="totals-section">
+        <div class="total-row">
+          <span class="label">Forma de Pagamento:</span>
+          <span class="value payment-method {{ data.sale.payment_method }}">
+            {{ data.sale.payment_method | titlecase }}
+          </span>
+        </div>
+        <div class="total-row">
+          <span class="label">Total:</span>
+          <span class="value total-amount">R$ {{ data.sale.total | number:'1.2-2' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dialog-actions">
+    <button mat-stroked-button (click)="dialogRef.close()">
+      <mat-icon>cancel</mat-icon>
+      Cancelar
+    </button>
+    <button mat-raised-button color="primary" (click)="dialogRef.close(true)">
+      <mat-icon>check_circle</mat-icon>
+      Confirmar Venda
+    </button>
+  </div>
+</div>

@@ -8,6 +8,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { Product, Sale } from '../../../core/domain/models';
 import { SalesService } from '../../../core/application/sales.service';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ConfirmSaleDialog } from '../confirm-sale-dialog/confirm-sale-dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-sales-form',
@@ -19,7 +23,8 @@ import { MatRadioModule } from '@angular/material/radio';
     MatInputModule,
     MatTableModule,
     MatIconModule,
-    MatRadioModule
+    MatRadioModule,
+    MatDialogModule
   ],
   templateUrl: './sales-form.html',
   styleUrls: ['./sales-form.scss']
@@ -37,8 +42,13 @@ export class SalesForm {
   selectedPaymentMethod: 'pix' | 'dinheiro' | 'crédito' | 'débito' | 'outro' = 'pix';
   
   displayedColumns: string[] = ['product', 'price', 'actions'];
+  isProcessing = false;
 
-  constructor(private salesService: SalesService) {}
+  constructor(
+    private salesService: SalesService,
+    private dialog: MatDialog, // Já estava aqui
+    private snackBar: MatSnackBar // Adicione esta linha
+  ) {}
 
   get total(): number {
     return this.selectedProducts.reduce((sum, product) => sum + product.price, 0);
@@ -80,9 +90,12 @@ export class SalesForm {
     alert('Funcionalidade de desconto será implementada em breve!');
   }
 
+  // ... no método onCheckout:
   onCheckout(): void {
     if (this.selectedProducts.length === 0) {
-      alert('Adicione produtos antes de fechar a venda!');
+      this.snackBar.open('Adicione produtos antes de fechar a venda!', 'Fechar', {
+        duration: 3000
+      });
       return;
     }
 
@@ -96,15 +109,34 @@ export class SalesForm {
       payment_method: this.selectedPaymentMethod
     };
 
-    this.salesService.registerSale(sale).subscribe({
-      next: (response) => {
-        alert(response.message); // "Venda registrada com sucesso"
-        this.selectedProducts = [];
-        this.closeForm.emit(); // Fecha o formulário após sucesso
-      },
-      error: (error) => {
-        console.error('Erro:', error);
-        alert(error.error?.message || 'Erro ao registrar venda!!!');
+    const dialogRef = this.dialog.open(ConfirmSaleDialog, {
+      width: '500px',
+      data: { sale },
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        this.isProcessing = true;
+        this.salesService.registerSale(sale).subscribe({
+          next: (response) => {
+            this.isProcessing = false;
+            this.snackBar.open('Venda registrada com sucesso!', 'Fechar', {
+              duration: 3000,
+              panelClass: 'success-snackbar'
+            });
+            this.selectedProducts = [];
+            this.closeForm.emit();
+          },
+          error: (error) => {
+            this.isProcessing = false;
+            this.snackBar.open(
+              error.error?.message || 'Erro ao registrar venda!', 
+              'Fechar', 
+              { duration: 3000, panelClass: 'error-snackbar' }
+            );
+          }
+        });
       }
     });
   }
