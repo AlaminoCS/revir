@@ -99,7 +99,7 @@ export class SalesForm {
       },
       error: (error) => {
         console.error('Erro:', error);
-        alert(error.error?.message || 'Erro ao registrar venda');
+        alert(error.error?.message || 'Erro ao registrar venda!!!');
       }
     });
   }
