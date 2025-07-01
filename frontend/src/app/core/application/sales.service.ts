@@ -10,11 +10,12 @@ export interface Product {
 }
 
 export interface Sale {
-  id?: number; // Adicione se retornado pelo backend
+  id?: number;
   products: Product[];
   total: number;
-  date?: string; // Mantenha para compatibilidade
-  created_at?: string; // Adicione para o Supabase
+  payment_method: 'pix' | 'dinheiro' | 'crédito' | 'débito' | 'outro';
+  created_at?: string;
+  date?: string;
 }
 
 @Injectable({

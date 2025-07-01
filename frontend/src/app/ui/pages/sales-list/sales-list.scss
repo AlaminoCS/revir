@@ -1,54 +1,51 @@
 .sales-list-container {
-  padding: 2rem;
-  margin-top: 64px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 
-  h2 {
-    margin-bottom: 1rem;
-    color: #333;
-  }
-
-  // Container com rolagem horizontal
-  table {
+  .mat-table {
     width: 100%;
-    border: 1px solid #e0e0e0;
-    overflow-x: auto;
-    display: block; // Permite scroll horizontal em telas pequenas
-
-    th,
-    td {
-      white-space: nowrap; // Impede quebra de texto
-      padding: 8px 12px;
-      text-align: left;
-    }
-
-    th {
-      background-color: #f5f5f5;
-    }
+    margin-bottom: 20px;
   }
 
   .product-list {
+    padding: 0;
     margin: 0;
-    padding-left: 1rem;
-    list-style-type: none;
+    list-style: none;
 
     li {
-      margin-bottom: 0.3rem;
+      padding: 4px 0;
+    }
+  }
+
+  .payment-method {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    text-transform: capitalize;
+
+    &.pix {
+      background-color: #e3f2fd;
+      color: #0d47a1;
+    }
+
+    &.dinheiro {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    &.crédito, &.débito {
+      background-color: #fff3e0;
+      color: #e65100;
+    }
+
+    &.outro {
+      background-color: #f3e5f5;
+      color: #6a1b9a;
     }
   }
 
   button {
-    margin-top: 1rem;
-  }
-
-  @media (max-width: 600px) {
-    padding: 1rem;
-
-    h2 {
-      font-size: 1.25rem;
-    }
-
-    button {
-      width: 100%;
-    }
+    margin-top: 20px;
   }
 }

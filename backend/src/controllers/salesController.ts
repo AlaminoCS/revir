@@ -11,6 +11,7 @@ type Product = {
 type Sale = {
   products: Product[];
   total: number;
+  payment_method: 'pix' | 'dinheiro' | 'crédito' | 'débito' | 'outro';
   created_at?: string;
 };
 
@@ -27,6 +28,8 @@ const supabase = createClient(supabaseUrl, supabaseKey, {
 });
 
 console.log('Supabase URL:', process.env.SUPABASE_URL?.slice(0, 10) + '...');
+
+const validPaymentMethods = ['pix', 'dinheiro', 'crédito', 'débito', 'outro'];
 
 export const getSales = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -48,7 +51,15 @@ export const getSales = async (req: Request, res: Response): Promise<void> => {
 };
 
 export const registerSale = async (req: Request, res: Response): Promise<void> => {
-  const { products, total } = req.body as Sale;
+  const { products, total, payment_method } = req.body as Sale & { payment_method: string };
+  
+  if (!validPaymentMethods.includes(payment_method)) {
+    res.status(400).json({  // ← Remova o 'return' aqui
+      error: 'Forma de pagamento inválida',
+      validMethods: validPaymentMethods 
+    });
+    return; // ← Mantenha apenas o return vazio
+  }
 
   // Validação dos dados
   if (!products || !Array.isArray(products) || products.length === 0) {
@@ -74,6 +85,7 @@ export const registerSale = async (req: Request, res: Response): Promise<void> =
       .insert([{
         products,
         total,
+        payment_method,
         created_at: new Date().toISOString()
       }])
       .select(); // Retorna o registro inserido

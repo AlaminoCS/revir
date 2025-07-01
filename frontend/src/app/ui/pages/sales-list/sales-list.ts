@@ -15,7 +15,7 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class SalesList {
   dataSource = new MatTableDataSource<Sale>();
-  displayedColumns: string[] = ['id', 'total', 'date', 'products'];
+  displayedColumns: string[] = ['id', 'total', 'payment', 'date', 'products'];
 
   constructor(
     private salesService: SalesService, 
@@ -28,21 +28,19 @@ export class SalesList {
   }
 
   loadSales(): void {
-    this.salesService.getSales().subscribe(
-      (data: any[]) => {
-        // Transforma os dados se necessário
-        const formattedData = data.map(sale => ({
+    this.salesService.getSales().subscribe({
+      next: (data) => {
+        this.dataSource.data = data.map(sale => ({
           ...sale,
-          date: sale.created_at || sale.date
+          date: sale.created_at || sale.date || new Date().toISOString()
         }));
-        
-        this.dataSource = new MatTableDataSource(formattedData);
         this.cdr.detectChanges();
       },
-      (error) => {
+      error: (error) => {
         console.error('Erro ao carregar vendas:', error);
+        alert('Erro ao carregar vendas. Tente novamente.');
       }
-    );
+    });
   }
 
   goBack(): void {

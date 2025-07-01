@@ -29,6 +29,17 @@
       </div>
     </div>
 
+    <div class="payment-method">
+      <h3>Forma de Pagamento</h3>
+      <mat-radio-group 
+        [(ngModel)]="selectedPaymentMethod"
+        aria-label="Selecione a forma de pagamento">
+        <mat-radio-button *ngFor="let method of paymentMethods" [value]="method">
+          {{ method | titlecase }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+
     <div class="right-column">
       <table mat-table [dataSource]="selectedProducts" class="products-table">
         <!-- Produto Column -->

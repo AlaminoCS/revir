@@ -7,6 +7,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { Product, Sale } from '../../../core/domain/models';
 import { SalesService } from '../../../core/application/sales.service';
+import { MatRadioModule } from '@angular/material/radio';
 
 @Component({
   selector: 'app-sales-form',
@@ -17,7 +18,8 @@ import { SalesService } from '../../../core/application/sales.service';
     MatButtonModule,
     MatInputModule,
     MatTableModule,
-    MatIconModule
+    MatIconModule,
+    MatRadioModule
   ],
   templateUrl: './sales-form.html',
   styleUrls: ['./sales-form.scss']
@@ -29,6 +31,10 @@ export class SalesForm {
   priceButtons = [10, 15, 20, 25, 30, 35, 40, 45, 55, 65, 75, 85, 95, 125, 135, 145, 155];
   filteredPrices = [...this.priceButtons];
   selectedProducts: {name: string, price: number}[] = [];
+
+  // Adicione no componente
+  paymentMethods = ['pix', 'dinheiro', 'crédito', 'débito', 'outro'] as const;
+  selectedPaymentMethod: 'pix' | 'dinheiro' | 'crédito' | 'débito' | 'outro' = 'pix';
   
   displayedColumns: string[] = ['product', 'price', 'actions'];
 
@@ -84,11 +90,10 @@ export class SalesForm {
       products: this.selectedProducts.map(p => ({ 
         name: p.name, 
         price: p.price,
-        quantity: 1 // Adicionando quantidade padrão
+        quantity: 1
       })),
       total: this.total,
-      id: 0, // Valor temporário
-      date: new Date().toISOString()
+      payment_method: this.selectedPaymentMethod
     };
 
     this.salesService.registerSale(sale).subscribe({
