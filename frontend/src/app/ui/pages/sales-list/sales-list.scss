@@ -1,11 +1,74 @@
 .sales-list-container {
-  padding: 20px;
-  max-width: 1200px;
+  padding: 24px;
+  max-width: 1400px;
   margin: 0 auto;
 
-  .mat-table {
-    width: 100%;
-    margin-bottom: 20px;
+  h2 {
+    color: #3f51b5; /* Azul principal */
+    margin-bottom: 24px;
+    font-weight: 500;
+  }
+
+  .filters-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+    align-items: center;
+
+    .search-field {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .payment-field {
+      width: 180px;
+    }
+
+    .date-field {
+      width: 150px; /* Removi as aspas que estavam causando problema */
+    }
+
+    .clear-button {
+      height: 56px;
+      margin-top: 4px;
+    }
+  }
+
+  .table-container {
+    overflow-x: auto;
+    margin-bottom: 24px;
+
+    .mat-table {
+      width: 100%;
+      min-width: 800px;
+    }
+
+    .mat-paginator {
+      border-radius: 0 0 4px 4px;
+      background-color: transparent;
+    }
+
+    .no-results {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      color: #757575; /* Cinza médio - substitui mat.get-color-from-palette */
+
+      mat-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        margin-bottom: 16px;
+      }
+
+      p {
+        margin: 0;
+        font-size: 16px;
+      }
+    }
   }
 
   .product-list {
@@ -15,6 +78,7 @@
 
     li {
       padding: 4px 0;
+      font-size: 14px;
     }
   }
 
@@ -23,6 +87,7 @@
     border-radius: 4px;
     font-weight: 500;
     text-transform: capitalize;
+    font-size: 14px;
 
     &.pix {
       background-color: #e3f2fd;
@@ -45,7 +110,7 @@
     }
   }
 
-  button {
-    margin-top: 20px;
+  .back-button {
+    margin-top: 16px;
   }
 }
