@@ -80,22 +80,27 @@ export class SalesForm {
       return;
     }
 
-    console.log('Produtos selecionados:', this.selectedProducts);
-
-    const sale: { products: { name: string; price: number }[], total: number } = {
-      products: this.selectedProducts,
-      total: this.total
+    const sale: Sale = {
+      products: this.selectedProducts.map(p => ({ 
+        name: p.name, 
+        price: p.price,
+        quantity: 1 // Adicionando quantidade padrão
+      })),
+      total: this.total,
+      id: 0, // Valor temporário
+      date: new Date().toISOString()
     };
 
-    this.salesService.registerSale(sale).subscribe(
-      () => {
-        alert('Venda registrada com sucesso!');
+    this.salesService.registerSale(sale).subscribe({
+      next: (response) => {
+        alert(response.message); // "Venda registrada com sucesso"
         this.selectedProducts = [];
+        this.closeForm.emit(); // Fecha o formulário após sucesso
       },
-      (error) => {
-        console.error('Erro ao registrar venda:', error);
-        alert('Erro ao salvar venda. Tente novamente.');
+      error: (error) => {
+        console.error('Erro:', error);
+        alert(error.error?.message || 'Erro ao registrar venda');
       }
-    );
+    });
   }
 }

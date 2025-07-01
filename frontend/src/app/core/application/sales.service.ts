@@ -25,8 +25,8 @@ export class SalesService {
 
   constructor(private http: HttpClient) {}
 
-  registerSale(sale: Sale): Observable<Sale> {
-    return this.http.post<Sale>(this.API_URL, sale);
+  registerSale(sale: Sale): Observable<{ message: string; sale: Sale }> {
+    return this.http.post<{ message: string; sale: Sale }>(this.API_URL, sale);
   }
 
   getSales(): Observable<Sale[]> {
