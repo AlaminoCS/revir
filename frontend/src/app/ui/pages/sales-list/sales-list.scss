@@ -2,6 +2,7 @@
   padding: 24px;
   max-width: 1400px;
   margin: 0 auto;
+  margin-top: 64px;
 
   h2 {
     color: #3f51b5; /* Azul principal */
@@ -19,6 +20,7 @@
     .search-field {
       flex: 1;
       min-width: 250px;
+      display: none;
     }
 
     .payment-field {
@@ -26,12 +28,14 @@
     }
 
     .date-field {
-      width: 150px; /* Removi as aspas que estavam causando problema */
+      width: 150px; 
+      display: none;
     }
 
     .clear-button {
       height: 56px;
       margin-top: 4px;
+      display: none;
     }
   }
 
@@ -112,5 +116,46 @@
 
   .back-button {
     margin-top: 16px;
+  }
+}
+
+.kpi-cards {
+  display: inline-flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  width: 500px;
+
+  .kpi-card {
+    flex: 1;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    
+    mat-card-content {
+      padding: 16px;
+    }
+  }
+
+  .kpi-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .kpi-icon {
+      font-size: 32px;
+      width: 32px;
+      height: 32px;
+      color: #3f51b5;
+    }
+
+    .kpi-value {
+      font-size: 24px;
+      font-weight: 500;
+      color: #3f51b5;
+    }
+
+    .kpi-label {
+      font-size: 14px;
+      color: #666;
+    }
   }
 }

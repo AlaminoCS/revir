@@ -1,6 +1,32 @@
 <div class="sales-list-container">
   <h2>Vendas do Dia</h2>
 
+  <div class="kpi-cards">
+    <mat-card class="kpi-card">
+      <mat-card-content>
+        <div class="kpi-content">
+          <mat-icon class="kpi-icon">shopping_cart</mat-icon>
+          <div>
+            <div class="kpi-value">{{ totalSalesToday }}</div>
+            <div class="kpi-label">Vendas Hoje</div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="kpi-card">
+      <mat-card-content>
+        <div class="kpi-content">
+          <mat-icon class="kpi-icon">attach_money</mat-icon>
+          <div>
+            <div class="kpi-value">R$ {{ totalAmountToday.toFixed(2) }}</div>
+            <div class="kpi-label">Total em Vendas</div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
   <!-- Filtros -->
   <div class="filters-container">
     <mat-form-field appearance="outline" class="search-field">

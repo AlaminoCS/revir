@@ -15,6 +15,7 @@ import { SalesService, Sale } from '../../../core/application/sales.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-sales-list',
@@ -32,7 +33,9 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
     MatNativeDateModule,
     MatIconModule,
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatCardModule,
+    MatIconModule
   ],
   templateUrl: './sales-list.html',
   styleUrls: ['./sales-list.scss']
@@ -41,6 +44,9 @@ export class SalesList implements AfterViewInit {
   dataSource = new MatTableDataSource<Sale>();
   displayedColumns: string[] = ['id', 'total', 'payment', 'date', 'products'];
   paymentMethods = ['todos', 'pix', 'dinheiro', 'crédito', 'débito', 'outro'];
+
+  totalSalesToday: number = 0;
+  totalAmountToday: number = 0;
   
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -81,12 +87,29 @@ export class SalesList implements AfterViewInit {
           ...sale,
           date: sale.created_at || sale.date || new Date().toISOString()
         }));
+        
+        // Calcular totais do dia
+        this.calculateDailyTotals(data);
       },
       error: (error) => {
         console.error('Erro ao carregar vendas:', error);
         alert('Erro ao carregar vendas. Tente novamente.');
       }
     });
+  }
+
+  calculateDailyTotals(sales: Sale[]): void {
+    const today = new Date().toISOString().split('T')[0];
+    
+    const todaySales = sales.filter(sale => {
+      // Verifica se existe date ou created_at e fornece um fallback
+      const saleDateStr = sale.date || sale.created_at || new Date().toISOString();
+      const saleDate = new Date(saleDateStr).toISOString().split('T')[0];
+      return saleDate === today;
+    });
+    
+    this.totalSalesToday = todaySales.length;
+    this.totalAmountToday = todaySales.reduce((sum, sale) => sum + (sale.total || 0), 0);
   }
 
   createFilter(): (data: Sale, filter: string) => boolean {
