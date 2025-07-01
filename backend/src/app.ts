@@ -7,27 +7,28 @@ import authRoutes from './routes/authRoutes';
 import salesRoutes from './routes/salesRoutes';
 
 
-
 const app = express();
 
 
-// Configuração detalhada do CORS
 const corsOptions = {
   origin: [
     'https://frontend-six-mu-33.vercel.app', // Seu frontend na Vercel
     'http://localhost:4200'                  // Ambiente de desenvolvimento
   ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Adicione OPTIONS
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'], // Adicione headers necessários
+  credentials: true,
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 };
 
 app.use(cors(corsOptions));
+app.options(/.*/, cors(corsOptions));
 
 // Middleware para headers adicionais
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
   next();
 });
 

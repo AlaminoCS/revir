@@ -1,40 +1,30 @@
-import app from './app';
 import { config } from 'dotenv';
-import { createClient } from '@supabase/supabase-js';
-import type { Request, Response } from 'express';
-
 config();
 
-// Configuração do Supabase com verificação
+import { createClient } from '@supabase/supabase-js';
+import express, { Request, Response } from 'express';
+import { createServer } from 'http';
+
+import app from './app';
+
+// Supabase config
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
-  console.error('❌ Variáveis do Supabase não configuradas!');
+  console.error('❌ Supabase config faltando!');
   if (process.env.NODE_ENV !== 'production') {
-    console.log('Dica: Crie um arquivo .env na raiz com:');
-    console.log('SUPABASE_URL="sua-url"');
-    console.log('SUPABASE_KEY="sua-chave"');
+    console.log('Crie um .env com SUPABASE_URL e SUPABASE_KEY');
   }
 }
 
 const supabase = createClient(supabaseUrl || '', supabaseKey || '', {
-  auth: { persistSession: false }
+  auth: { persistSession: false },
 });
 
-// Adicione esta rota de teste antes do export
+// Teste de conexão com Supabase
 app.get('/api/test-supabase', async (req: Request, res: Response) => {
   try {
-    if (!supabaseUrl || !supabaseKey) {
-      return res.status(500).json({ 
-        error: 'Variáveis do Supabase não configuradas',
-        config: {
-          supabaseUrl: supabaseUrl ? '✅' : '❌',
-          supabaseKey: supabaseKey ? '✅' : '❌'
-        }
-      });
-    }
-
     const { data, error } = await supabase
       .from('sales')
       .select('*')
@@ -43,31 +33,32 @@ app.get('/api/test-supabase', async (req: Request, res: Response) => {
     if (error) throw error;
 
     res.json({
-      status: 'Conexão com Supabase OK!',
+      status: '✅ Conexão OK!',
       firstSale: data.length > 0 ? data[0] : 'Nenhuma venda encontrada',
       env: {
         nodeEnv: process.env.NODE_ENV,
-        region: process.env.VERCEL_REGION
-      }
+        region: process.env.VERCEL_REGION,
+      },
     });
-  } catch (error: unknown) {
-    console.error('Erro no teste Supabase:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
-    res.status(500).json({ 
-      error: 'Falha na conexão com Supabase',
-      details: errorMessage 
+  } catch (error: any) {
+    res.status(500).json({
+      error: '❌ Erro na conexão com Supabase',
+      details: error?.message || 'Erro desconhecido',
     });
   }
 });
 
-// Exportação para Vercel (mantenha como última linha)
-export default app;
-
-// Rodar localmente
+// ⚙️ LOCAL: roda com listen()
 if (process.env.NODE_ENV !== 'production') {
   const PORT = process.env.PORT || 3001;
   app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-    console.log(`Teste Supabase: http://localhost:${PORT}/api/test-supabase`);
+    console.log(`🚀 Servidor local rodando em http://localhost:${PORT}`);
+    console.log(`🧪 Teste Supabase: http://localhost:${PORT}/api/test-supabase`);
   });
 }
+
+// 🚀 VERCEL: exporta como handler compatível
+const server = createServer(app);
+export default (req: any, res: any) => {
+  server.emit('request', req, res);
+};

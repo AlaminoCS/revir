@@ -22,11 +22,20 @@ export interface Sale {
 })
 export class SalesService {
   private readonly API_URL = 'https://backend-orcin-alpha-63.vercel.app/api/sales';
+  //private readonly API_URL = 'http://localhost:3001/api/sales';
 
   constructor(private http: HttpClient) {}
 
   registerSale(sale: Sale): Observable<{ message: string; sale: Sale }> {
-    return this.http.post<{ message: string; sale: Sale }>(this.API_URL, sale);
+    return this.http.post<{ message: string; sale: Sale }>(
+      this.API_URL, 
+      sale,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
   }
 
   getSales(): Observable<Sale[]> {
