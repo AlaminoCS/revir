@@ -1,20 +1,24 @@
 <mat-toolbar class="header">
   <!-- Logo -->
-  <div class="logo">
+  <a class="logo" mat-button [routerLink]="'/sales'">
     <mat-icon>storefront</mat-icon>
     <span>Revir</span>
-  </div>
+  </a>
 
   <!-- Menu -->
   <nav class="menu">
     @for (item of menuItems; track item.name) {
       <a 
         mat-button 
-        [routerLink]="item.route" 
-        class="menu-item"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        #rla="routerLinkActive"
+        [class.menu-item]="true"
+        [class.active]="rla.isActive"
       >
         {{ item.name }}
       </a>
+
     }
   </nav>
 

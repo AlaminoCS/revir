@@ -22,9 +22,9 @@ import { RouterModule } from '@angular/router';
 })
 export class Header {
   menuItems = [
-    { name: 'Vendas', route: '/vendas' },
-    { name: 'Relatório', route: '/relatorios' },
-    { name: 'Fornecedores', route: '/fornecedores' },
-    { name: 'Produtos', route: '/produtos' }
+    { name: 'Vendas', route: '/sales-list' },
+    { name: 'Relatório', route: '/reports' },
+    { name: 'Fornecedores', route: '/suppliers' },
+    { name: 'Produtos', route: '/products' }
   ];
 }
