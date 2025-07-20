@@ -5,7 +5,7 @@ import { SalesService } from '../../../core/application/sales.service';
 import { Sale } from '../../../core/domain/models';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { NgIf, NgFor, DecimalPipe } from '@angular/common';
+import { NgIf, DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-reports',
@@ -14,8 +14,7 @@ import { NgIf, NgFor, DecimalPipe } from '@angular/common';
     MatCardModule,
     MatGridListModule,
     NgIf,
-    NgFor,
-    DecimalPipe // ✅ necessário para o pipe `number`
+    DecimalPipe 
   ],
   templateUrl: './reports.html',
   styleUrls: ['./reports.scss'],
