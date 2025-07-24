@@ -6,6 +6,7 @@ import cors from 'cors';
 import authRoutes from './routes/authRoutes';
 import salesRoutes from './routes/salesRoutes';
 import clientesRoutes from './routes/clientesRoutes';
+import fornecedoresRoutes from './routes/fornecedores.routes';
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api', salesRoutes); 
 app.use('/api', clientesRoutes); 
+app.use('/api', fornecedoresRoutes)
 
 // Rota de health check
 app.get('/api/health', (req, res) => {

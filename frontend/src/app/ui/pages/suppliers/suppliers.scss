@@ -1,8 +1,13 @@
-.reports-container{
-  padding: 24px;
-  max-width: 1400px;
-  margin: 0 auto;
-  margin-top: 64px;
+@use '../client-registration/client-registration.scss' as *;
+
+.supplier-page-container {
+  @extend .client-page-container;
 }
 
+.supplier-registration-container {
+  @extend .client-registration-container;
+}
 
+.supplier-list-container {
+  @extend .client-list-container;
+}
