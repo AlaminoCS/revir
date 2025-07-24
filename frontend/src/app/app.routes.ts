@@ -6,6 +6,7 @@ import { SalesList } from './ui/pages/sales-list/sales-list';
 import { Reports } from './ui/pages/reports/reports'; 
 import { Suppliers } from './ui/pages/suppliers/suppliers';
 import { Products } from './ui/pages/products/products';
+import { ClientRegistration } from './ui/pages/client-registration/client-registration';
 
 
 export const routes: Routes = [
@@ -15,5 +16,6 @@ export const routes: Routes = [
   { path: 'reports', component: Reports }, 
   { path: 'suppliers', component: Suppliers },
   { path: 'products', component: Products },
+  { path: 'client-registration', component: ClientRegistration },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 ];

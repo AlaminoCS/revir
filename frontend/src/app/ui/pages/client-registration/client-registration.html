@@ -1,0 +1,72 @@
+<div class="client-page-container">
+  <!-- Coluna 1: Cadastro -->
+  <section class="client-registration-container">
+    <mat-card class="registration-card">
+      <mat-card-header>
+        <mat-card-title>Cadastro de Cliente</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form #clientForm="ngForm" (ngSubmit)="onSubmit(clientForm)" class="registration-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nome Completo</mat-label>
+            <input matInput [(ngModel)]="clientData.nome" name="nome" required>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Telefone</mat-label>
+            <input matInput [(ngModel)]="clientData.telefone" name="telefone" 
+                  placeholder="(00) 00000-0000" (input)="formatPhone()" maxlength="15">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Data de Nascimento</mat-label>
+            <input matInput [(ngModel)]="clientData.data_nascimento" name="data_nascimento"
+                  type="date">
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" type="submit" class="submit-button">
+            Salvar
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </section>
+
+  <!-- Coluna 2: Lista -->
+  <section class="client-list-container">
+    <div class="table-header-sort">
+      <h2 class="table-title">Clientes Cadastrados</h2>
+      <div class="sort-buttons">
+        <button mat-stroked-button color="primary" (click)="setSortField('nome')">
+          Ordenar por Nome
+          <mat-icon *ngIf="sortField === 'nome'">{{ sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward' }}</mat-icon>
+        </button>
+        <button mat-stroked-button color="primary" (click)="setSortField('data_nascimento')">
+          Ordenar por Data de Nascimento
+          <mat-icon *ngIf="sortField === 'data_nascimento'">{{ sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward' }}</mat-icon>
+        </button>
+      </div>
+    </div>
+    <mat-table [dataSource]="clientes" class="mat-elevation-z2 full-width">
+      <ng-container matColumnDef="nome">
+        <mat-header-cell *matHeaderCellDef> Nome </mat-header-cell>
+        <mat-cell *matCellDef="let cliente"> {{ cliente.nome }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="telefone">
+        <mat-header-cell *matHeaderCellDef> Telefone </mat-header-cell>
+        <mat-cell *matCellDef="let cliente"> {{ cliente.telefone }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="data_nascimento">
+        <mat-header-cell *matHeaderCellDef> Data de Nascimento </mat-header-cell>
+        <mat-cell *matCellDef="let cliente"> 
+          {{ cliente.data_nascimento ? (cliente.data_nascimento | date: 'dd/MM/yyyy') : '—' }}
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </section>
+</div>

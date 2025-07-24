@@ -25,6 +25,7 @@ export class Header {
     { name: 'Vendas', route: '/sales-list' },
     { name: 'Relatório', route: '/reports' },
     { name: 'Fornecedores', route: '/suppliers' },
-    { name: 'Produtos', route: '/products' }
+    { name: 'Produtos', route: '/products' },
+    { name: 'Clientes', route: '/client-registration' }
   ];
 }
