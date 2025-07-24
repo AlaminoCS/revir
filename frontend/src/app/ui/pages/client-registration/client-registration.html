@@ -1,3 +1,7 @@
+<ui-modal-confirm *ngIf="showDeleteModal" (closed)="onDeleteModalClosed($event)" confirmText="Excluir">
+  <span modal-title>Excluir cliente</span>
+  <span modal-content>Tem certeza que deseja excluir o cliente <b>{{ clienteToDelete?.nome }}</b>?</span>
+</ui-modal-confirm>
 <div class="client-page-container">
   <!-- Coluna 1: Cadastro -->
   <section class="client-registration-container">
@@ -24,8 +28,11 @@
                   type="date">
           </mat-form-field>
 
-          <button mat-raised-button color="primary" type="submit" class="submit-button">
-            Salvar
+          <button mat-raised-button
+                  [color]="isEditMode ? 'accent' : 'primary'"
+                  type="submit"
+                  class="submit-button">
+            {{ isEditMode ? 'Editar' : 'Salvar' }}
           </button>
         </form>
       </mat-card-content>
@@ -62,6 +69,19 @@
         <mat-header-cell *matHeaderCellDef> Data de Nascimento </mat-header-cell>
         <mat-cell *matCellDef="let cliente"> 
           {{ cliente.data_nascimento ? (cliente.data_nascimento | date: 'dd/MM/yyyy') : '—' }}
+        </mat-cell>
+      </ng-container>
+
+      <!-- Coluna de ações -->
+      <ng-container matColumnDef="acoes">
+        <mat-header-cell *matHeaderCellDef> Ações </mat-header-cell>
+        <mat-cell *matCellDef="let cliente">
+          <button mat-icon-button color="primary" (click)="onEditCliente(cliente)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="onDeleteCliente(cliente)">
+            <mat-icon>delete</mat-icon>
+          </button>
         </mat-cell>
       </ng-container>
 

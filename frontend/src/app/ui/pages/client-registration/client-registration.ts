@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ModalConfirmComponent } from '../../atoms/modal-confirm/modal-confirm';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -39,27 +40,36 @@ import { FormsModule } from '@angular/forms';
     ReactiveFormsModule,
     MatCardModule,
     MatButtonToggleModule,
+    ModalConfirmComponent
   ],
   templateUrl: './client-registration.html',
   styleUrls: ['./client-registration.scss']
 })
 export class ClientRegistration implements OnInit {
-  displayedColumns: string[] = ['nome', 'telefone', 'data_nascimento'];
+  displayedColumns: string[] = ['nome', 'telefone', 'data_nascimento', 'acoes'];
   clientes: any[] = [];
 
   // Opções de ordenação
   sortField: 'nome' | 'data_nascimento' = 'nome';
   sortDirection: 'asc' | 'desc' = 'asc';
 
-  clientData = {
+  clientData: any = {
+    id: undefined,
     nome: '',
     telefone: '',
     data_nascimento: ''
   };
+  isEditMode = false;
+  showDeleteModal: boolean = false;
+  clienteToDelete: any = null;
+
+  url2 = 'http://localhost:3001';
+  url = 'https://backend-orcin-alpha-63.vercel.app';
 
   constructor(
     private http: HttpClient,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -67,11 +77,11 @@ export class ClientRegistration implements OnInit {
   }
 
   loadClientes() {
-    //this.http.get<any[]>('http://localhost:3001/api/clientes')
-    this.http.get<any[]>('https://backend-orcin-alpha-63.vercel.app/api/clientes')    
+    this.http.get<any[]>(`${this.url2}/api/clientes`)
       .subscribe({
         next: (data) => {
-          this.clientes = this.sortClientes(data);
+          this.clientes = [...this.sortClientes(data)];
+          this.cdr.detectChanges();
         },
         error: (error) => {
           this.snackBar.open('Erro ao carregar clientes: ' + error.message, 'Fechar', {
@@ -130,31 +140,91 @@ export class ClientRegistration implements OnInit {
   }
 
   onSubmit(form: any) {
-    this.http.post('http://localhost:3001/api/clientes', this.clientData)
-      .subscribe({
-        next: (response) => {
-          this.snackBar.open('Cliente cadastrado com sucesso!', 'Fechar', {
-            duration: 3000,
-            panelClass: ['success-snackbar']
-          });
-          this.resetForm(form);
-          this.loadClientes(); // Atualiza a tabela depois de cadastrar
-        },
-        error: (error) => {
-          this.snackBar.open('Erro ao cadastrar cliente: ' + error.message, 'Fechar', {
-            duration: 5000,
-            panelClass: ['error-snackbar']
-          });
-        }
-      });
+    const reloadAndReset = () => {
+      this.loadClientes();
+      this.resetForm(form);
+    };
+    if (this.isEditMode && this.clientData.id) {
+      // Editar cliente
+      this.http.put(`${this.url2}/api/clientes/${this.clientData.id}`, this.clientData)
+        .subscribe({
+          next: () => {
+            this.snackBar.open('Cliente editado com sucesso!', 'Fechar', {
+              duration: 3000,
+              panelClass: ['success-snackbar']
+            });
+            reloadAndReset();
+          },
+          error: (error) => {
+            this.snackBar.open('Erro ao editar cliente: ' + error.message, 'Fechar', {
+              duration: 5000,
+              panelClass: ['error-snackbar']
+            });
+          }
+        });
+    } else {
+      // Criar cliente
+      this.http.post(`${this.url2}/api/clientes`, this.clientData)
+        .subscribe({
+          next: () => {
+            this.snackBar.open('Cliente cadastrado com sucesso!', 'Fechar', {
+              duration: 3000,
+              panelClass: ['success-snackbar']
+            });
+            reloadAndReset();
+          },
+          error: (error) => {
+            this.snackBar.open('Erro ao cadastrar cliente: ' + error.message, 'Fechar', {
+              duration: 5000,
+              panelClass: ['error-snackbar']
+            });
+          }
+        });
+    }
+  }
+
+  onEditCliente(cliente: any) {
+    this.clientData = { ...cliente };
+    this.isEditMode = true;
+  }
+
+  onDeleteCliente(cliente: any) {
+    this.clienteToDelete = cliente;
+    this.showDeleteModal = true;
+  }
+
+  onDeleteModalClosed(event: any) {
+    const confirmed = typeof event === 'boolean' ? event : false;
+    if (confirmed && this.clienteToDelete) {
+      this.http.delete(`${this.url2}/api/clientes/${this.clienteToDelete.id}`)
+        .subscribe({
+          next: () => {
+            this.snackBar.open('Cliente excluído com sucesso!', 'Fechar', {
+              duration: 3000,
+              panelClass: ['success-snackbar']
+            });
+            this.loadClientes();
+          },
+          error: (error) => {
+            this.snackBar.open('Erro ao excluir cliente: ' + error.message, 'Fechar', {
+              duration: 5000,
+              panelClass: ['error-snackbar']
+            });
+          }
+        });
+    }
+    this.showDeleteModal = false;
+    this.clienteToDelete = null;
   }
 
   resetForm(form: any) {
     this.clientData = {
+      id: undefined,
       nome: '',
       telefone: '',
       data_nascimento: ''
     };
+    this.isEditMode = false;
     if (form) {
       form.resetForm();
     }
