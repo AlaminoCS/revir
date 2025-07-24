@@ -1,0 +1,13 @@
+@use '../suppliers/suppliers.scss' as *;
+
+.purchases-page-container {
+  @extend .supplier-page-container;
+}
+
+.purchases-registration-container {
+  @extend .supplier-registration-container;
+}
+
+.purchases-list-container {
+  @extend .supplier-list-container;
+}

@@ -1,0 +1,118 @@
+
+<ui-modal-confirm *ngIf="showDeleteModal" (closed)="onDeleteModalClosed($event)" confirmText="Excluir">
+  <span modal-title>Excluir compra</span>
+  <span modal-content>Tem certeza que deseja excluir a compra de <b>{{ compraToDelete?.fornecedor }}</b>?</span>
+</ui-modal-confirm>
+<div class="purchases-page-container">
+  <!-- Coluna 1: Cadastro -->
+  <section class="purchases-registration-container">
+    <mat-card class="registration-card">
+      <mat-card-header>
+        <mat-card-title>Cadastro de Compra</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form #purchaseForm="ngForm" (ngSubmit)="onSubmit(purchaseForm)" class="registration-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Fornecedor</mat-label>
+            <input matInput placeholder="Buscar fornecedor..." [(ngModel)]="fornecedorFilter" (ngModelChange)="filterFornecedores()" autocomplete="off">
+            <mat-select [(ngModel)]="purchaseData.fornecedor_id" name="fornecedor_id" required>
+              <mat-option value="" disabled>Selecione o fornecedor</mat-option>
+              <mat-option *ngFor="let fornecedor of filteredFornecedores" [value]="fornecedor.id">
+                {{ fornecedor.nome }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Tipo</mat-label>
+            <mat-select [(ngModel)]="purchaseData.tipo" name="tipo" required>
+              <mat-option value="venda">Venda</mat-option>
+              <mat-option value="troca">Troca</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Quantidade de peças</mat-label>
+            <input matInput type="number" [(ngModel)]="purchaseData.quantidade" name="quantidade" min="1" required>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Valor</mat-label>
+            <input matInput type="text"
+                   [(ngModel)]="purchaseData.valor"
+                   name="valor"
+                   required
+                   inputmode="decimal"
+                   pattern="^\d{1,3}(\.\d{3})*(,\d{0,2})?$"
+                   (focus)="onValorFocus()"
+                   (input)="onValorInput($event)"
+                   (blur)="onValorBlur()"
+                   placeholder="0,00">
+          </mat-form-field>
+
+          <button mat-raised-button
+                  [color]="isEditMode ? 'accent' : 'primary'"
+                  type="submit"
+                  class="submit-button">
+            {{ isEditMode ? 'Editar' : 'Salvar' }}
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </section>
+
+  <!-- Coluna 2: Lista -->
+  <section class="purchases-list-container">
+    <div class="table-header-sort">
+      <h2 class="table-title">Compras Realizadas</h2>
+      <div class="sort-buttons">
+        <button mat-stroked-button color="primary" (click)="setSortField('fornecedor')">
+          Ordenar por Fornecedor
+          <mat-icon *ngIf="sortField === 'fornecedor'">{{ sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward' }}</mat-icon>
+        </button>
+        <button mat-stroked-button color="primary" (click)="setSortField('tipo')">
+          Ordenar por Tipo
+          <mat-icon *ngIf="sortField === 'tipo'">{{ sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward' }}</mat-icon>
+        </button>
+      </div>
+    </div>
+    <mat-table [dataSource]="compras" class="mat-elevation-z2 full-width">
+      <ng-container matColumnDef="fornecedor">
+        <mat-header-cell *matHeaderCellDef> Fornecedor </mat-header-cell>
+        <mat-cell *matCellDef="let compra"> {{ compra.fornecedor }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="tipo">
+        <mat-header-cell *matHeaderCellDef> Tipo </mat-header-cell>
+        <mat-cell *matCellDef="let compra"> {{ compra.tipo }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="quantidade">
+        <mat-header-cell *matHeaderCellDef> Quantidade </mat-header-cell>
+        <mat-cell *matCellDef="let compra"> {{ compra.quantidade }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="valor">
+        <mat-header-cell *matHeaderCellDef> Valor </mat-header-cell>
+        <mat-cell *matCellDef="let compra">{{ compra.valor | currency:'BRL':'symbol':'1.2-2' }}</mat-cell>
+      </ng-container>
+
+      <!-- Coluna de ações -->
+      <ng-container matColumnDef="acoes">
+        <mat-header-cell *matHeaderCellDef> Ações </mat-header-cell>
+        <mat-cell *matCellDef="let compra">
+          <button mat-icon-button color="primary" (click)="onEditCompra(compra)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="onDeleteCompra(compra)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </section>
+</div>
