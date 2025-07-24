@@ -7,6 +7,7 @@ import authRoutes from './routes/authRoutes';
 import salesRoutes from './routes/salesRoutes';
 import clientesRoutes from './routes/clientesRoutes';
 import fornecedoresRoutes from './routes/fornecedores.routes';
+import purchasesRoutes from './routes/purchasesRoutes';
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api', salesRoutes); 
 app.use('/api', clientesRoutes); 
 app.use('/api', fornecedoresRoutes)
+app.use('/api', purchasesRoutes);
 
 // Rota de health check
 app.get('/api/health', (req, res) => {
