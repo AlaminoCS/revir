@@ -59,7 +59,7 @@ export class Suppliers implements OnInit {
   }
 
   url = 'http://localhost:3001';
-  url2 = 'https://backend-orcin-alpha-63.vercel.app/';
+  url2 = 'https://backend-orcin-alpha-63.vercel.app';
 
   loadFornecedores() {
     this.http.get<any[]>(`${this.url2}/api/fornecedores`)
