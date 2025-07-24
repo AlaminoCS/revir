@@ -94,8 +94,8 @@ export class PurchasesComponent implements OnInit {
     this.filteredFornecedores = this.fornecedores.filter(f => f.nome.toLowerCase().includes(filterValue));
   }
 
-  url2 = 'http://localhost:3001';
-  url = 'https://backend-orcin-alpha-63.vercel.app';
+  url = 'http://localhost:3001';
+  url2 = 'https://backend-orcin-alpha-63.vercel.app';
 
   loadCompras() {
     this.http.get<any[]>(`${this.url2}/api/purchases`)
