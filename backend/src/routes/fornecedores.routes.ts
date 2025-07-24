@@ -11,8 +11,8 @@ const router = Router()
 
 router.post('/fornecedores', createFornecedor)
 router.get('/fornecedores', listFornecedores)
-router.get('/fornecedores:id', getFornecedorById)
-router.put('/fornecedores:id', updateFornecedor)
-router.delete('/fornecedores:id', deleteFornecedor)
+router.get('/fornecedores/:id', getFornecedorById)
+router.put('/fornecedores/:id', updateFornecedor)
+router.delete('/fornecedores/:id', deleteFornecedor)
 
 export default router

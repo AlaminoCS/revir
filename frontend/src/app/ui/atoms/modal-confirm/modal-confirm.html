@@ -1,0 +1,14 @@
+<div class="modal-confirm-backdrop" (click)="onBackdropClick($event)"></div>
+<div class="modal-confirm-card">
+  <div class="modal-confirm-header">
+    <ng-content select="[modal-title]"></ng-content>
+    <button mat-icon-button class="close-btn" (click)="onClose(false)"><mat-icon>close</mat-icon></button>
+  </div>
+  <div class="modal-confirm-content">
+    <ng-content select="[modal-content]"></ng-content>
+  </div>
+  <div class="modal-confirm-actions">
+    <button mat-stroked-button color="primary" (click)="onClose(false)">Cancelar</button>
+    <button mat-flat-button color="warn" (click)="onClose(true)">{{ confirmText || 'Confirmar' }}</button>
+  </div>
+</div>

@@ -1,3 +1,7 @@
+<ui-modal-confirm *ngIf="showDeleteModal" (closed)="onDeleteModalClosed($event)" confirmText="Excluir">
+  <span modal-title>Excluir fornecedor</span>
+  <span modal-content>Tem certeza que deseja excluir o fornecedor <b>{{ fornecedorToDelete?.nome }}</b>?</span>
+</ui-modal-confirm>
 <div class="supplier-page-container">
   <!-- Coluna 1: Cadastro -->
   <section class="supplier-registration-container">
@@ -24,8 +28,11 @@
                    placeholder="(00) 00000-0000" (input)="formatPhone()" maxlength="15">
           </mat-form-field>
 
-          <button mat-raised-button color="primary" type="submit" class="submit-button">
-            Salvar
+          <button mat-raised-button
+                  [color]="isEditMode ? 'accent' : 'primary'"
+                  type="submit"
+                  class="submit-button">
+            {{ isEditMode ? 'Editar' : 'Salvar' }}
           </button>
         </form>
       </mat-card-content>
@@ -57,6 +64,19 @@
       <ng-container matColumnDef="telefone">
         <mat-header-cell *matHeaderCellDef> Telefone </mat-header-cell>
         <mat-cell *matCellDef="let fornecedor"> {{ fornecedor.telefone }} </mat-cell>
+      </ng-container>
+
+      <!-- Coluna de ações -->
+      <ng-container matColumnDef="acoes">
+        <mat-header-cell *matHeaderCellDef> Ações </mat-header-cell>
+        <mat-cell *matCellDef="let fornecedor">
+          <button mat-icon-button color="primary" (click)="onEditFornecedor(fornecedor)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="onDeleteFornecedor(fornecedor)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
