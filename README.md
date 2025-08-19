@@ -54,6 +54,7 @@ cd frontend
 npm run build
 ```
 
+
 ## Variáveis de ambiente importantes
 
 Backend (arquivo `.env` na pasta `backend` ou variáveis de ambiente do servidor):
