@@ -1,46 +1,40 @@
-name: Deploy Frontend no Vercel
+name: Frontend CI & Deploy (Vite + Vercel)
 
 on:
   push:
-    branches:
-      - main
-      - master
+    branches: [ main, master ]
+    paths:
+      - 'frontend/**'
+  workflow_dispatch:
 
 jobs:
-  build-deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout do código
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Configurar Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 20.x
+          node-version: '20'
 
-      - name: Instalar dependências do frontend
-        run: |
-          cd frontend
-          npm install
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./frontend
 
-      - name: Instalar Angular CLI globalmente
-        run: |
-          cd frontend
-          npm install -g @angular/cli
+      - name: Build (Vite)
+        run: npm run build
+        working-directory: ./frontend
 
-      - name: Build do projeto Angular
-        run: |
-          cd frontend
-          ng build --configuration=production
+      - name: Install Vercel CLI
+        run: npm install -g vercel --no-progress
+        working-directory: ./frontend
 
-      - name: Instalar Vercel CLI
-        run: |
-          cd frontend
-          npm install -g vercel --force
-
-      - name: Fazer deploy no Vercel
-        run: |
-          cd frontend
-          vercel deploy --prod --token=$VERCEL_TOKEN --yes
+      - name: Deploy to Vercel (frontend)
+        run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --confirm
+        working-directory: ./frontend
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_FRONTEND_PROJECT_ID }}
