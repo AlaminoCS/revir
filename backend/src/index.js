@@ -9,6 +9,15 @@ app.use(express.json())
 
 const PORT = process.env.PORT || 4000
 
+// Adicione no seu index.js
+app.get('/debug-env', (req, res) => {
+  res.json({
+    supabaseUrl: process.env.SUPABASE_URL ? 'SET' : 'MISSING',
+    supabaseKey: process.env.SUPABASE_SERVICE_ROLE_KEY ? 'SET' : 'MISSING',
+    nodeEnv: process.env.NODE_ENV
+  })
+})
+
 
 app.get('/', (req, res) => {
   res.json({message: 'Revir backend running', owner: 'Cleide'})
