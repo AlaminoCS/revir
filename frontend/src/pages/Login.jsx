@@ -26,10 +26,12 @@ export function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
 
+  const url = 'VITE_API_BASE=https://backrevir.vercel.app' // 'http://localhost:4000'
+
   function handleSubmit(e) {
     e.preventDefault();
     if (!email || !password) return;
-    axios.post('http://localhost:4000/auth/login', { email, password })
+    axios.post(`${url}/auth/login`, { email, password })
       .then(res => {
         const token = res.data && res.data.token;
         if (token) {

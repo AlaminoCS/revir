@@ -87,8 +87,11 @@ export function CartProvider({ children }) {
       client_id: clientId || null,
     }
 
+    const url = 'VITE_API_BASE=https://backrevir.vercel.app' // 'http://localhost:4000'
+    
+
     const token = window.localStorage.getItem('revir_token')
-    const res = await axios.post('http://localhost:4000/sales', payload, {
+    const res = await axios.post(`${url}/sales`, payload, {
       headers: { Authorization: token ? `Bearer ${token}` : '' },
     })
     return res.data

@@ -52,11 +52,13 @@ export function Cart() {
       try {
         const token = window.localStorage.getItem('revir_token')
         const productIds = items.map(item => item.id)
+
+        const url = 'VITE_API_BASE=https://backrevir.vercel.app' // 'http://localhost:4000'
         
         if (productIds.length > 0) {
           const responses = await Promise.all(
             productIds.map(id => 
-              axios.get(`http://localhost:4000/products/${id}`, {
+              axios.get(`${url}/products/${id}`, {
                 headers: { Authorization: token ? `Bearer ${token}` : '' }
               })
             )
@@ -129,7 +131,7 @@ export function Cart() {
     try {
       const token = window.localStorage.getItem('revir_token')
       const res = await axios.get(
-        `http://localhost:4000/clients/by-cpf/${digits}`,
+        `${url}/clients/by-cpf/${digits}`,
         { headers: { Authorization: token ? `Bearer ${token}` : '' } }
       )
       if (res.data && res.data.item) {

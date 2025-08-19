@@ -94,13 +94,15 @@ export function Vendas() {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
+  const url = 'VITE_API_BASE=https://backrevir.vercel.app' // 'http://localhost:4000'
+
   // Data fetching remains the same
   useEffect(() => {
     let mounted = true;
     const token = window.localStorage.getItem('revir_token');
 
     axios
-      .get('http://localhost:4000/sales', {
+      .get(`${url}/sales`, {
         headers: { Authorization: token ? `Bearer ${token}` : '' },
       })
       .then((r) => {
