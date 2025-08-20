@@ -94,7 +94,7 @@ export function Vendas() {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const url = 'VITE_API_BASE=https://backrevir.vercel.app' // 'http://localhost:4000'
+  const url = 'https://backrevir.vercel.app' // 'http://localhost:4000'
 
   // Data fetching remains the same
   useEffect(() => {
