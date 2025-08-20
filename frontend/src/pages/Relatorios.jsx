@@ -101,7 +101,7 @@ export function Relatorios() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const url = 'VITE_API_BASE=https://backrevir.vercel.app' // 'http://localhost:4000'
+  const url = 'https://backrevir.vercel.app' // 'http://localhost:4000'
   useEffect(() => {
     let mounted = true
     const token = window.localStorage.getItem('revir_token')

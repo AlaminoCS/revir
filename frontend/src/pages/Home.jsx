@@ -26,7 +26,7 @@ export function Home() {
   const { addItem } = useCart()
   const theme = useTheme()
 
-  const url = 'VITE_API_BASE=https://backrevir.vercel.app' // 'http://localhost:4000'
+  const url = 'https://backrevir.vercel.app' // 'http://localhost:4000'
 
   useEffect(() => {
     let mounted = true

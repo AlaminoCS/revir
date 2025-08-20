@@ -32,7 +32,7 @@ export function Clientes() {
 
   useEffect(() => {
     let mounted = true
-    const url = 'VITE_API_BASE=https://backrevir.vercel.app' // 'http://localhost:4000'
+    const url = 'https://backrevir.vercel.app' // 'http://localhost:4000'
     const token = window.localStorage.getItem('revir_token')
     axios.get(`${url}/clients`, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
       .then(r => { if (!mounted) return; if (r.data && r.data.items) setClients(r.data.items) })

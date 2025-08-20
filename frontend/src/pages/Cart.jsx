@@ -53,7 +53,7 @@ export function Cart() {
         const token = window.localStorage.getItem('revir_token')
         const productIds = items.map(item => item.id)
 
-        const url = 'VITE_API_BASE=https://backrevir.vercel.app' // 'http://localhost:4000'
+        const url = 'https://backrevir.vercel.app' // 'http://localhost:4000'
         
         if (productIds.length > 0) {
           const responses = await Promise.all(

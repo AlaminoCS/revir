@@ -87,7 +87,7 @@ export function CartProvider({ children }) {
       client_id: clientId || null,
     }
 
-    const url = 'VITE_API_BASE=https://backrevir.vercel.app' // 'http://localhost:4000'
+    const url = 'https://backrevir.vercel.app' // 'http://localhost:4000'
     
 
     const token = window.localStorage.getItem('revir_token')

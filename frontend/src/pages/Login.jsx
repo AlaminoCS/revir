@@ -26,7 +26,7 @@ export function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
 
-  const url = 'VITE_API_BASE=https://backrevir.vercel.app' // 'http://localhost:4000'
+  const url = 'https://backrevir.vercel.app' // 'http://localhost:4000'
 
   function handleSubmit(e) {
     e.preventDefault();
