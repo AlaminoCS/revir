@@ -9,7 +9,15 @@ app.use(express.json())
 
 const PORT = process.env.PORT || 4000
 
-// Adicione no seu index.js
+app.use(cors({
+  origin: [
+    'https://frontrevir.vercel.app/', 
+    'http://localhost:5173'
+  ],
+  credentials: true
+}));
+
+
 app.get('/debug-env', (req, res) => {
   res.json({
     supabaseUrl: process.env.SUPABASE_URL ? 'SET' : 'MISSING',
