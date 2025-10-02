@@ -45,13 +45,12 @@ function AppLayout() {
   // Páginas onde o header não deve aparecer
   const noHeaderPages = ['/']
   const shouldShowHeader = isAuthenticated && !noHeaderPages.includes(location.pathname)
-  const shouldShowFooter = isAuthenticated && !noHeaderPages.includes(location.pathname)
 
   return (
     <>
       {shouldShowHeader && <Header />}
       <main style={{ 
-        padding: !isAuthenticated ? '0rem' : '1.5rem',
+        padding: '1.5rem',
         paddingTop: shouldShowHeader ? '6rem' : '1.5rem',
         minHeight: 'calc(100vh - 6rem)',
         backgroundColor: '#f5f5f5'
@@ -70,7 +69,7 @@ function AppLayout() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
-      {shouldShowFooter && <Footer />}
+  <Footer />
     </>
   )
 }

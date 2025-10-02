@@ -81,6 +81,26 @@ function getPaymentBadge(pm) {
   return { label: pm || String(pm), color: 'default' }
 }
 
+// Map client info type to display label and Chip color
+function getClientInfoBadge(type, value) {
+  if (!type || !value) return { label: '—', color: 'default', type: null }
+  
+  const typeMap = {
+    'nome': { label: 'Nome', color: 'primary', icon: '👤' },
+    'cpf': { label: 'CPF', color: 'success', icon: '🆔' },
+    'email': { label: 'Email', color: 'info', icon: '📧' },
+    'telefone': { label: 'Telefone', color: 'warning', icon: '📱' }
+  }
+  
+  const config = typeMap[type] || { label: type, color: 'default', icon: '❓' }
+  return { 
+    label: `${config.icon} ${config.label}`, 
+    color: config.color, 
+    type: type,
+    value: value
+  }
+}
+
 export function Vendas() {
   const [period, setPeriod] = useState('mes');
   const [items, setItems] = useState([]);
@@ -94,15 +114,13 @@ export function Vendas() {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const url = 'https://backrevir.vercel.app' // 'http://localhost:4000'
-
   // Data fetching remains the same
   useEffect(() => {
     let mounted = true;
     const token = window.localStorage.getItem('revir_token');
 
     axios
-      .get(`${url}/sales`, {
+      .get('http://localhost:4000/sales', {
         headers: { Authorization: token ? `Bearer ${token}` : '' },
       })
       .then((r) => {
@@ -118,9 +136,14 @@ export function Vendas() {
             : it.qty || 0,
             // client CPF may come joined under client.cpf or as client_cpf
             clientCpf: (it.client && (it.client.cpf || it.client.CPF)) || it.client_cpf || null,
+            // new client info fields
+            clientInfoType: it.client_info_type || null,
+            clientInfoValue: it.client_info_value || null,
       payment_method: it.payment_method || '—',
       // payment badge
       ...(function(){ const b = getPaymentBadge(it.payment_method || it.paymentMethod || it.payment || ''); return { paymentLabel: b.label, paymentColor: b.color } })(),
+      // client info badge
+      ...(function(){ const b = getClientInfoBadge(it.client_info_type, it.client_info_value); return { clientInfoLabel: b.label, clientInfoColor: b.color, clientInfoType: b.type, clientInfoValue: b.value } })(),
           notes: it.notes || it.note || null,
         }));
         if (mounted) setItems(normalized);
@@ -151,12 +174,29 @@ export function Vendas() {
     return items.filter((it) => {
       const d = it.createdAt ? new Date(it.createdAt) : new Date();
 
-      if (d < from) return false;
-      if (filterYear && d.getFullYear() !== Number(filterYear)) return false;
-      if (filterMonth && filterMonth > 0 && d.getMonth() + 1 !== Number(filterMonth))
-        return false;
-  if (paymentFilter !== 'Todas' && it.paymentLabel !== paymentFilter)
-        return false;
+      // Aplicar filtro de período apenas se não houver filtros específicos de mês/ano
+      if (filterMonth === 0 && filterYear === new Date().getFullYear()) {
+        if (d < from) return false;
+      } else {
+        // Aplicar filtros específicos de mês e ano
+        if (filterYear && d.getFullYear() !== Number(filterYear)) return false;
+        if (filterMonth && filterMonth > 0 && d.getMonth() + 1 !== Number(filterMonth))
+          return false;
+      }
+  if (paymentFilter !== 'Todas') {
+        // Mapear valores do select para labels de pagamento
+        const paymentMap = {
+          'Pix': 'Pix',
+          'Cartão': ['Crédito', 'Débito'],
+          'Dinheiro': 'Dinheiro'
+        }
+        const expectedPayments = paymentMap[paymentFilter]
+        if (Array.isArray(expectedPayments)) {
+          if (!expectedPayments.includes(it.paymentLabel)) return false
+        } else {
+          if (it.paymentLabel !== expectedPayments) return false
+        }
+      }
 
       if (search) {
         const query = search.toLowerCase();
@@ -164,10 +204,14 @@ export function Vendas() {
           String(it.id).includes(query) ||
           String(it.total).includes(query) ||
           String(it.clientCpf || '').toLowerCase().includes(query) ||
+          String(it.clientInfoValue || '').toLowerCase().includes(query) ||
+          String(it.clientInfoType || '').toLowerCase().includes(query) ||
           String(it.payment_method).toLowerCase().includes(query) ||
           String(it.paymentLabel || '').toLowerCase().includes(query) ||
           d.toLocaleString().includes(query) ||
-          (it.products || []).some((p) => p.title?.toLowerCase().includes(query))
+          (it.products || []).some((p) => 
+            (p.title || p.name || '').toLowerCase().includes(query)
+          )
         );
       }
 
@@ -218,7 +262,12 @@ export function Vendas() {
         <ToggleButtonGroup
           value={period}
           exclusive
-          onChange={(e, v) => v && setPeriod(v)}
+          onChange={(e, v) => {
+            if (v) {
+              setPeriod(v)
+              setPage(1) // Reset página ao mudar período
+            }
+          }}
           size="small"
           sx={{
             bgcolor: 'background.paper',
@@ -452,7 +501,6 @@ export function Vendas() {
               <TableRow sx={{ bgcolor: 'grey.50' }}>
                   <TableCell sx={{ fontWeight: 600, color: 'text.secondary' }}>Total</TableCell>
                   <TableCell sx={{ fontWeight: 600, color: 'text.secondary' }}>Pagamento</TableCell>
-                  <TableCell sx={{ fontWeight: 600, color: 'text.secondary' }}>CPF</TableCell>
                   <TableCell sx={{ fontWeight: 600, color: 'text.secondary' }}>Data</TableCell>
                   <TableCell sx={{ fontWeight: 600, color: 'text.secondary' }}>Itens</TableCell>
               </TableRow>
@@ -478,9 +526,6 @@ export function Vendas() {
                         sx={{ fontWeight: 500 }}
                       />
                     </TableCell>
-                    <TableCell sx={{ color: 'text.secondary', fontSize: '0.95rem', fontWeight: 600 }}>
-                      {it.clientCpf || '—'}
-                    </TableCell>
                     <TableCell sx={{ color: 'text.secondary', fontSize: '0.875rem' }}>
                       {new Date(it.createdAt).toLocaleString()}
                     </TableCell>
@@ -494,7 +539,7 @@ export function Vendas() {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={5} align="center" sx={{ py: 4, color: 'text.secondary' }}>
+                  <TableCell colSpan={4} align="center" sx={{ py: 4, color: 'text.secondary' }}>
                     Nenhuma venda encontrada com os filtros aplicados.
                   </TableCell>
                 </TableRow>

@@ -14,6 +14,8 @@ export function CartProvider({ children }) {
   const [paymentMethod, setPaymentMethod] = useState('pix')
   const [discount, setDiscount] = useState(0)
   const [discountType, setDiscountType] = useState('value') // 'value' ou 'percent'
+  const [clientInfoType, setClientInfoType] = useState('') // 'nome', 'cpf', 'email', 'telefone'
+  const [clientInfoValue, setClientInfoValue] = useState('')
 
   const addItem = (product, qty = 1) => {
     setItems((prev) => {
@@ -55,6 +57,8 @@ export function CartProvider({ children }) {
     setPaymentMethod('pix')
     setDiscount(0)
     setDiscountType('value')
+    setClientInfoType('')
+    setClientInfoValue('')
   }
 
   const subtotal = () => {
@@ -85,13 +89,12 @@ export function CartProvider({ children }) {
       discount: discountValue,
       client_cpf: cpf || null,
       client_id: clientId || null,
+      client_info_type: clientInfoType || null,
+      client_info_value: clientInfoValue || null,
     }
 
-    const url = 'https://backrevir.vercel.app' // 'http://localhost:4000'
-    
-
     const token = window.localStorage.getItem('revir_token')
-    const res = await axios.post(`${url}/sales`, payload, {
+    const res = await axios.post('http://localhost:4000/sales', payload, {
       headers: { Authorization: token ? `Bearer ${token}` : '' },
     })
     return res.data
@@ -115,6 +118,10 @@ export function CartProvider({ children }) {
         setDiscount,
         discountType,
         setDiscountType,
+        clientInfoType,
+        setClientInfoType,
+        clientInfoValue,
+        setClientInfoValue,
         subtotal,
         total,
         checkout,

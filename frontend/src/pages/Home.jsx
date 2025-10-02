@@ -26,11 +26,9 @@ export function Home() {
   const { addItem } = useCart()
   const theme = useTheme()
 
-  const url = 'https://backrevir.vercel.app' // 'http://localhost:4000'
-
   useEffect(() => {
     let mounted = true
-    axios.get(`${url}/products`)
+    axios.get('http://localhost:4000/products')
       .then(r => {
         if (mounted && r.data && r.data.items) {
           const normalizedItems = r.data.items.map(item => ({

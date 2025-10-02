@@ -13,7 +13,10 @@ import {
   Remove as RemoveIcon
 } from '@mui/icons-material'
 import { motion, AnimatePresence } from 'framer-motion'
-import { formatCPF, isValidCPF, MAX_LENGTH_CPF } from '../utils/validators'
+import { 
+  formatCPF, isValidCPF, MAX_LENGTH_CPF,
+  formatPhone, isValidPhone, MAX_LENGTH_PHONE
+} from '../utils/validators'
 import { ReceiptModal } from '../components/receipt-modal/'
 import { useCart } from '../context/CartContext'
 
@@ -33,12 +36,18 @@ export function Cart() {
     setDiscount,
     discountType,
     setDiscountType,
+    clientInfoType,
+    setClientInfoType,
+    clientInfoValue,
+    setClientInfoValue,
     subtotal,
     total,
     checkout
   } = useCart()
 
   const [localCpf, setLocalCpf] = useState(cpf || '')
+  const [localClientInfoType, setLocalClientInfoType] = useState(clientInfoType || '')
+  const [localClientInfoValue, setLocalClientInfoValue] = useState(clientInfoValue || '')
   const [showReceipt, setShowReceipt] = useState(false)
   const [receiptData, setReceiptData] = useState(null)
   const [clientAlert, setClientAlert] = useState(null)
@@ -52,13 +61,11 @@ export function Cart() {
       try {
         const token = window.localStorage.getItem('revir_token')
         const productIds = items.map(item => item.id)
-
-        const url = 'https://backrevir.vercel.app' // 'http://localhost:4000'
         
         if (productIds.length > 0) {
           const responses = await Promise.all(
             productIds.map(id => 
-              axios.get(`${url}/products/${id}`, {
+              axios.get(`http://localhost:4000/products/${id}`, {
                 headers: { Authorization: token ? `Bearer ${token}` : '' }
               })
             )
@@ -84,10 +91,21 @@ export function Cart() {
   }, [items])
 
   const handleCheckout = async () => {
-    if (localCpf && !isValidCPF(localCpf)) return alert('CPF inválido. Insira no formato 000.000.000-00')
+    // Validar CPF se for o tipo selecionado
+    if (localClientInfoType === 'cpf' && localClientInfoValue && !isValidCPF(localClientInfoValue)) {
+      return alert('CPF inválido. Insira no formato 000.000.000-00')
+    }
+    
+    // Validar telefone se for o tipo selecionado
+    if (localClientInfoType === 'telefone' && localClientInfoValue && !isValidPhone(localClientInfoValue)) {
+      return alert('Telefone inválido. Insira no formato (00) 00000-0000')
+    }
+    
     try {
       setLoading(true)
       setCpf(localCpf)
+      setClientInfoType(localClientInfoType)
+      setClientInfoValue(localClientInfoValue)
 
       const sub = subtotal()
       const actualDiscount = discountType === 'percent'
@@ -106,7 +124,9 @@ export function Cart() {
         total: total(),
         paymentMethod,
         cpf: localCpf,
-        clientName: clientAlert?.text?.replace('Cliente: ', '') || null
+        clientName: clientAlert?.text?.replace('Cliente: ', '') || null,
+        clientInfoType: localClientInfoType,
+        clientInfoValue: localClientInfoValue
       })
       setShowReceipt(true)
       clearCart()
@@ -131,7 +151,7 @@ export function Cart() {
     try {
       const token = window.localStorage.getItem('revir_token')
       const res = await axios.get(
-        `${url}/clients/by-cpf/${digits}`,
+        `http://localhost:4000/clients/by-cpf/${digits}`,
         { headers: { Authorization: token ? `Bearer ${token}` : '' } }
       )
       if (res.data && res.data.item) {
@@ -149,6 +169,75 @@ export function Cart() {
         return
       }
       console.error('CPF lookup error', err)
+    }
+  }
+
+  const formatClientInfoValue = (value, type) => {
+    switch (type) {
+      case 'cpf':
+        return formatCPF(value)
+      case 'telefone':
+        return formatPhone(value)
+      default:
+        return value
+    }
+  }
+
+  const getClientInfoLabel = (type) => {
+    switch (type) {
+      case 'nome':
+        return 'Nome do Cliente'
+      case 'cpf':
+        return 'CPF do Cliente'
+      case 'email':
+        return 'Email do Cliente'
+      case 'telefone':
+        return 'Telefone do Cliente'
+      default:
+        return 'Informação do Cliente'
+    }
+  }
+
+  const getClientInfoPlaceholder = (type) => {
+    switch (type) {
+      case 'nome':
+        return 'Digite o nome do cliente'
+      case 'cpf':
+        return '000.000.000-00'
+      case 'email':
+        return 'cliente@exemplo.com'
+      case 'telefone':
+        return '(00) 00000-0000'
+      default:
+        return 'Digite a informação do cliente'
+    }
+  }
+
+  const getClientInfoMaxLength = (type) => {
+    switch (type) {
+      case 'cpf':
+        return MAX_LENGTH_CPF
+      case 'telefone':
+        return MAX_LENGTH_PHONE
+      default:
+        return undefined
+    }
+  }
+
+  const handleClientInfoTypeChange = (newType) => {
+    setLocalClientInfoType(newType)
+    setLocalClientInfoValue('')
+    setClientAlert(null)
+    setClientId(null)
+  }
+
+  const handleClientInfoValueChange = (value) => {
+    const formattedValue = formatClientInfoValue(value, localClientInfoType)
+    setLocalClientInfoValue(formattedValue)
+    
+    // Se for CPF, fazer a busca automática
+    if (localClientInfoType === 'cpf') {
+      checkCpf(formattedValue)
     }
   }
 
@@ -345,22 +434,43 @@ export function Cart() {
                   
                   <Grid container spacing={2}>
                     <Grid item xs={12} md={6}>
-                      <TextField
-                        label="CPF do Cliente"
-                        value={localCpf}
-                        onChange={e => setLocalCpf(formatCPF(e.target.value))}
-                        onBlur={e => checkCpf(e.target.value)}
+                      <Select
+                        value={localClientInfoType}
+                        onChange={e => handleClientInfoTypeChange(e.target.value)}
                         fullWidth
                         size="small"
                         sx={{ mb: 2 }}
-                        inputProps={{ maxLength: MAX_LENGTH_CPF }}
-                      />
+                        displayEmpty
+                      >
+                        <MenuItem value="">
+                          <em>Selecione o tipo de informação</em>
+                        </MenuItem>
+                        <MenuItem value="nome">Nome</MenuItem>
+                        <MenuItem value="cpf">CPF</MenuItem>
+                        <MenuItem value="email">Email</MenuItem>
+                        <MenuItem value="telefone">Telefone</MenuItem>
+                      </Select>
+                      
+                      {localClientInfoType && (
+                        <TextField
+                          label={getClientInfoLabel(localClientInfoType)}
+                          value={localClientInfoValue}
+                          onChange={e => handleClientInfoValueChange(e.target.value)}
+                          fullWidth
+                          size="small"
+                          placeholder={getClientInfoPlaceholder(localClientInfoType)}
+                          inputProps={{ 
+                            maxLength: getClientInfoMaxLength(localClientInfoType)
+                          }}
+                        />
+                      )}
+                      
                       {clientAlert && (
                         <Chip
                           label={clientAlert.text}
                           color={clientAlert.variant === 'success' ? 'success' : 'error'}
                           size="small"
-                          sx={{ mb: 2 }}
+                          sx={{ mt: 1 }}
                         />
                       )}
                     </Grid>

@@ -51,13 +51,11 @@ export function Produtos() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const url = 'https://backrevir.vercel.app' // 'http://localhost:4000'
-
   useEffect(() => {
     let mounted = true;
     const token = window.localStorage.getItem('revir_token');
     axios
-      .get(`${url}/products`, {
+      .get('http://localhost:4000/products', {
         headers: { Authorization: token ? `Bearer ${token}` : '' },
       })
       .then((r) => {
@@ -107,7 +105,7 @@ export function Produtos() {
     if (!confirm('Excluir este produto? Esta ação não pode ser desfeita.')) return;
     const token = window.localStorage.getItem('revir_token');
     axios
-      .delete(`${url}/products/${id}`, {
+      .delete(`http://localhost:4000/products/${id}`, {
         headers: { Authorization: token ? `Bearer ${token}` : '' },
       })
       .then(() => setItems((s) => s.filter((i) => i.id !== id)))
@@ -147,14 +145,14 @@ export function Produtos() {
 
     try {
       if (editing) {
-        const res = await axios.put(`${url}/products/${editing}`, payload, {
+        const res = await axios.put(`http://localhost:4000/products/${editing}`, payload, {
           headers: { Authorization: token ? `Bearer ${token}` : '' },
         });
         if (res.data?.item) {
           setItems((s) => s.map((i) => (i.id === editing ? res.data.item : i)));
         }
       } else {
-        const res = await axios.post(`${url}/products`, payload, {
+        const res = await axios.post('http://localhost:4000/products', payload, {
           headers: { Authorization: token ? `Bearer ${token}` : '' },
         });
         if (res.data?.item) {

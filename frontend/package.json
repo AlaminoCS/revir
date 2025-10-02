@@ -1,7 +1,7 @@
 {
   "name": "revir-frontend",
   "version": "0.1.0",
-  "private": true, 
+  "private": true,
   "scripts": {
     "dev": "vite",
     "build": "vite build",

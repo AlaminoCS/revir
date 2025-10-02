@@ -32,9 +32,8 @@ export function Clientes() {
 
   useEffect(() => {
     let mounted = true
-    const url = 'https://backrevir.vercel.app' // 'http://localhost:4000'
     const token = window.localStorage.getItem('revir_token')
-    axios.get(`${url}/clients`, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
+    axios.get('http://localhost:4000/clients', { headers: { Authorization: token ? `Bearer ${token}` : '' } })
       .then(r => { if (!mounted) return; if (r.data && r.data.items) setClients(r.data.items) })
       .catch(() => {
         try { const raw = localStorage.getItem(STORAGE_KEY); if (raw && mounted) setClients(JSON.parse(raw)) } catch (e) { console.error(e) }
@@ -62,7 +61,7 @@ export function Clientes() {
   const handleDelete = (id) => {
     if (!confirm('Excluir este cliente?')) return
     const token = window.localStorage.getItem('revir_token')
-    axios.delete(`${url}/clients/${id}`, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
+    axios.delete(`http://localhost:4000/clients/${id}`, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
       .then(() => setClients(s => s.filter(c => c.id !== id)))
       .catch(() => setClients(s => s.filter(c => c.id !== id)))
   }
@@ -82,11 +81,11 @@ export function Clientes() {
     const payload = { name: form.name, phone: form.phone, dob: form.dob, cpf: cpfRaw }
     const token = window.localStorage.getItem('revir_token')
     if (editing) {
-      axios.put(`${url}/clients/${editing}`, payload, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
+      axios.put(`http://localhost:4000/clients/${editing}`, payload, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
         .then(r => setClients(s => s.map(c => c.id === editing ? r.data.item : c)))
         .catch(() => setClients(s => s.map(c => c.id === editing ? { ...c, ...payload, id: editing } : c)))
     } else {
-      axios.post(`${url}/clients`, payload, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
+      axios.post('http://localhost:4000/clients', payload, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
         .then(r => setClients(s => [...s, r.data.item]))
         .catch(() => { const id = Date.now(); setClients(s => [...s, { id, ...payload }]) })
     }

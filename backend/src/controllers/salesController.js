@@ -49,13 +49,15 @@ async function registerSale(req, res) {
     if (!ensureSupabase(res)) return
     const body = req.body || {}
 
-    // Accept frontend shape: items ([{id, qty}]), paymentMethod, discount, clientId, cpf
+    // Accept frontend shape: items ([{id, qty}]), paymentMethod, discount, clientId, cpf, clientInfoType, clientInfoValue
     const itemsInput = Array.isArray(body.items) ? body.items : null
   const paymentMethodRaw = body.paymentMethod || body.payment_method
   const paymentMethod = normalizePaymentMethod(paymentMethodRaw)
     const discount = Number(body.discount || 0)
     const clientId = body.clientId || null
     const clientCpf = body.cpf || null
+    const clientInfoType = body.client_info_type || null
+    const clientInfoValue = body.client_info_value || null
     let products = Array.isArray(body.products) ? body.products : null
     let total = typeof body.total === 'number' ? body.total : null
 
@@ -105,6 +107,8 @@ async function registerSale(req, res) {
       payment_method: paymentMethod,
       client_id: clientId || null,
       client_cpf: clientCpf || null,
+      client_info_type: clientInfoType || null,
+      client_info_value: clientInfoValue || null,
       created_at: new Date().toISOString()
     }
 
