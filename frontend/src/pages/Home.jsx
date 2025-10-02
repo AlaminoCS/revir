@@ -13,6 +13,7 @@ import {
 } from '@mui/material'
 import axios from 'axios'
 import { useCart } from '../context/CartContext'
+import { API_BASE_URL } from '../utils/constants'
 import { PromoBanner } from '../components/promo-banner/'
 import { 
   Image as ImageIcon,
@@ -28,7 +29,7 @@ export function Home() {
 
   useEffect(() => {
     let mounted = true
-    axios.get('http://localhost:4000/products')
+    axios.get(`${API_BASE_URL}/products`)
       .then(r => {
         if (mounted && r.data && r.data.items) {
           const normalizedItems = r.data.items.map(item => ({

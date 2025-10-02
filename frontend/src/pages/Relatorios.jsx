@@ -30,6 +30,7 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import axios from 'axios';
 import { generateAndPrintReport } from '../components/ReportPrinter';
+import { API_BASE_URL } from '../utils/constants';
 import Grid2 from '@mui/material/Unstable_Grid2';
 
 function getSaleDate(sale) {
@@ -105,7 +106,7 @@ export function Relatorios() {
     let mounted = true
     const token = window.localStorage.getItem('revir_token')
     axios
-      .get('http://localhost:4000/sales', {
+      .get(`${API_BASE_URL}/sales`, {
         headers: { Authorization: token ? `Bearer ${token}` : '' },
       })
       .then((r) => {

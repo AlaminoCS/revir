@@ -35,6 +35,7 @@ import {
   Description as DescriptionIcon
 } from '@mui/icons-material';
 import axios from 'axios';
+import { API_BASE_URL } from '../utils/constants';
 
 const STORAGE_KEY = 'revir_products';
 
@@ -55,7 +56,7 @@ export function Produtos() {
     let mounted = true;
     const token = window.localStorage.getItem('revir_token');
     axios
-      .get('http://localhost:4000/products', {
+      .get(`${API_BASE_URL}/products`, {
         headers: { Authorization: token ? `Bearer ${token}` : '' },
       })
       .then((r) => {
@@ -105,7 +106,7 @@ export function Produtos() {
     if (!confirm('Excluir este produto? Esta ação não pode ser desfeita.')) return;
     const token = window.localStorage.getItem('revir_token');
     axios
-      .delete(`http://localhost:4000/products/${id}`, {
+      .delete(`${API_BASE_URL}/products/${id}`, {
         headers: { Authorization: token ? `Bearer ${token}` : '' },
       })
       .then(() => setItems((s) => s.filter((i) => i.id !== id)))
@@ -145,14 +146,14 @@ export function Produtos() {
 
     try {
       if (editing) {
-        const res = await axios.put(`http://localhost:4000/products/${editing}`, payload, {
+        const res = await axios.put(`${API_BASE_URL}/products/${editing}`, payload, {
           headers: { Authorization: token ? `Bearer ${token}` : '' },
         });
         if (res.data?.item) {
           setItems((s) => s.map((i) => (i.id === editing ? res.data.item : i)));
         }
       } else {
-        const res = await axios.post('http://localhost:4000/products', payload, {
+        const res = await axios.post(`${API_BASE_URL}/products`, payload, {
           headers: { Authorization: token ? `Bearer ${token}` : '' },
         });
         if (res.data?.item) {

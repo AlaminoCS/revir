@@ -18,6 +18,7 @@ import {
 } from '@mui/icons-material'
 import { formatCPF, unformatCPF, isValidCPF, formatCNPJ, unformatCNPJ, isValidCNPJ, formatPhone, MAX_LENGTH_CPF, MAX_LENGTH_CNPJ, MAX_LENGTH_PHONE } from '../utils/validators'
 import axios from 'axios'
+import { API_BASE_URL } from '../utils/constants'
 
 const STORAGE_KEY = 'revir_suppliers'
 
@@ -36,7 +37,7 @@ export function Fornecedores() {
   useEffect(() => {
     let mounted = true
     const token = window.localStorage.getItem('revir_token')
-    axios.get('http://localhost:4000/suppliers', { headers: { Authorization: token ? `Bearer ${token}` : '' } })
+    axios.get(`${API_BASE_URL}/suppliers`, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
       .then(r => { if (!mounted) return; if (r.data && r.data.items) setItems(r.data.items) })
       .catch(() => { try { const raw = localStorage.getItem(STORAGE_KEY); if (raw && mounted) setItems(JSON.parse(raw)) } catch (e) { console.error(e) } })
     return () => { mounted = false }
@@ -67,7 +68,7 @@ export function Fornecedores() {
   const handleDelete = (id) => {
     if (!confirm('Excluir este fornecedor?')) return
     const token = window.localStorage.getItem('revir_token')
-    axios.delete(`http://localhost:4000/suppliers/${id}`, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
+    axios.delete(`${API_BASE_URL}/suppliers/${id}`, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
       .then(() => setItems(s => s.filter(i => i.id !== id)))
       .catch(() => setItems(s => s.filter(i => i.id !== id)))
   }
@@ -94,11 +95,11 @@ export function Fornecedores() {
     const payload = { name: form.name, isCNPJ: form.isCNPJ, doc: rawDoc, phone: form.phone, email: form.email }
     const token = window.localStorage.getItem('revir_token')
     if (editing) {
-      axios.put(`http://localhost:4000/suppliers/${editing}`, payload, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
+      axios.put(`${API_BASE_URL}/suppliers/${editing}`, payload, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
         .then(r => setItems(s => s.map(it => it.id === editing ? r.data.item : it)))
         .catch(() => setItems(s => s.map(it => it.id === editing ? { ...it, ...payload, id: editing } : it)))
     } else {
-      axios.post('http://localhost:4000/suppliers', payload, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
+      axios.post(`${API_BASE_URL}/suppliers`, payload, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
         .then(r => setItems(s => [...s, r.data.item]))
         .catch(() => { const id = Date.now(); setItems(s => [...s, { id, ...payload }]) })
     }

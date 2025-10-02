@@ -16,6 +16,7 @@ import {
   CalendarToday as CalendarTodayIcon
 } from '@mui/icons-material'
 import axios from 'axios'
+import { API_BASE_URL } from '../utils/constants'
 
 const STORAGE_KEY = 'revir_purchases'
 
@@ -52,8 +53,8 @@ export function Compras() {
     const fetchData = async () => {
       try {
         const [purchasesRes, suppliersRes] = await Promise.all([
-          axios.get('http://localhost:4000/purchases', { headers: { Authorization: token ? `Bearer ${token}` : '' } }),
-          axios.get('http://localhost:4000/suppliers', { headers: { Authorization: token ? `Bearer ${token}` : '' } })
+          axios.get(`${API_BASE_URL}/purchases`, { headers: { Authorization: token ? `Bearer ${token}` : '' } }),
+          axios.get(`${API_BASE_URL}/suppliers`, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
         ])
         
         if (mounted) {
@@ -101,7 +102,7 @@ export function Compras() {
   const handleDelete = (id) => {
     if (!confirm('Excluir esta compra?')) return
     const token = window.localStorage.getItem('revir_token')
-    axios.delete(`http://localhost:4000/purchases/${id}`, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
+    axios.delete(`${API_BASE_URL}/purchases/${id}`, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
       .then(() => setItems(s => s.filter(i => i.id !== id)))
       .catch(() => setItems(s => s.filter(i => i.id !== id)))
   }
@@ -122,11 +123,11 @@ export function Compras() {
     
     const token = window.localStorage.getItem('revir_token')
     if (editing) {
-      axios.put(`http://localhost:4000/purchases/${editing}`, payload, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
+      axios.put(`${API_BASE_URL}/purchases/${editing}`, payload, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
   .then(r => setItems(s => s.map(i => i.id === editing ? normalizePurchase(r.data.item) : i)))
   .catch(() => setItems(s => s.map(i => i.id === editing ? { ...i, ...payload, id: editing } : i)))
     } else {
-      axios.post('http://localhost:4000/purchases', payload, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
+      axios.post(`${API_BASE_URL}/purchases`, payload, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
   .then(r => setItems(s => [...s, normalizePurchase(r.data.item)]))
   .catch(() => { const id = Date.now(); setItems(s => [...s, { id, ...payload }]) })
     }

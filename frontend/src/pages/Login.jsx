@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../context/AuthContext'
+import { API_BASE_URL } from '../utils/constants'
 import { Box, Grid, Paper, Typography, TextField, Button, IconButton, InputAdornment, FormControlLabel, Checkbox, Container } from '@mui/material'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
@@ -17,7 +18,7 @@ export function Login() {
     e.preventDefault()
     if (!email || !password) return
 
-    axios.post('http://localhost:4000/auth/login', { email, password })
+    axios.post(`${API_BASE_URL}/auth/login`, { email, password })
       .then(res => {
         const token = res.data && res.data.token
         if (token) {

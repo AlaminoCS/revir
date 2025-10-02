@@ -15,6 +15,7 @@ import {
 } from '@mui/icons-material'
 import { formatCPF, unformatCPF, isValidCPF, formatPhone, MAX_LENGTH_CPF, MAX_LENGTH_PHONE } from '../utils/validators'
 import axios from 'axios'
+import { API_BASE_URL } from '../utils/constants'
 
 const STORAGE_KEY = 'revir_clients'
 
@@ -33,7 +34,7 @@ export function Clientes() {
   useEffect(() => {
     let mounted = true
     const token = window.localStorage.getItem('revir_token')
-    axios.get('http://localhost:4000/clients', { headers: { Authorization: token ? `Bearer ${token}` : '' } })
+    axios.get(`${API_BASE_URL}/clients`, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
       .then(r => { if (!mounted) return; if (r.data && r.data.items) setClients(r.data.items) })
       .catch(() => {
         try { const raw = localStorage.getItem(STORAGE_KEY); if (raw && mounted) setClients(JSON.parse(raw)) } catch (e) { console.error(e) }
@@ -61,7 +62,7 @@ export function Clientes() {
   const handleDelete = (id) => {
     if (!confirm('Excluir este cliente?')) return
     const token = window.localStorage.getItem('revir_token')
-    axios.delete(`http://localhost:4000/clients/${id}`, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
+    axios.delete(`${API_BASE_URL}/clients/${id}`, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
       .then(() => setClients(s => s.filter(c => c.id !== id)))
       .catch(() => setClients(s => s.filter(c => c.id !== id)))
   }
@@ -81,11 +82,11 @@ export function Clientes() {
     const payload = { name: form.name, phone: form.phone, dob: form.dob, cpf: cpfRaw }
     const token = window.localStorage.getItem('revir_token')
     if (editing) {
-      axios.put(`http://localhost:4000/clients/${editing}`, payload, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
+      axios.put(`${API_BASE_URL}/clients/${editing}`, payload, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
         .then(r => setClients(s => s.map(c => c.id === editing ? r.data.item : c)))
         .catch(() => setClients(s => s.map(c => c.id === editing ? { ...c, ...payload, id: editing } : c)))
     } else {
-      axios.post('http://localhost:4000/clients', payload, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
+      axios.post(`${API_BASE_URL}/clients`, payload, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
         .then(r => setClients(s => [...s, r.data.item]))
         .catch(() => { const id = Date.now(); setClients(s => [...s, { id, ...payload }]) })
     }

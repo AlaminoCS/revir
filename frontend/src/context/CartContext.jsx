@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState } from 'react'
 import axios from 'axios'
+import { API_BASE_URL } from '../utils/constants'
 
 // Crie o contexto
 const CartContext = createContext(null)
@@ -94,7 +95,7 @@ export function CartProvider({ children }) {
     }
 
     const token = window.localStorage.getItem('revir_token')
-    const res = await axios.post('http://localhost:4000/sales', payload, {
+    const res = await axios.post(`${API_BASE_URL}/sales`, payload, {
       headers: { Authorization: token ? `Bearer ${token}` : '' },
     })
     return res.data

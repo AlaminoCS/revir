@@ -36,6 +36,7 @@ import {
   ArrowDownward as ArrowDownwardIcon
 } from '@mui/icons-material';
 import axios from 'axios';
+import { API_BASE_URL } from '../utils/constants';
 
 const STORAGE_KEY = 'revir_sales';
 
@@ -120,7 +121,7 @@ export function Vendas() {
     const token = window.localStorage.getItem('revir_token');
 
     axios
-      .get('http://localhost:4000/sales', {
+      .get(`${API_BASE_URL}/sales`, {
         headers: { Authorization: token ? `Bearer ${token}` : '' },
       })
       .then((r) => {

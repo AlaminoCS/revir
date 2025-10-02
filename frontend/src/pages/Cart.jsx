@@ -19,6 +19,7 @@ import {
 } from '../utils/validators'
 import { ReceiptModal } from '../components/receipt-modal/'
 import { useCart } from '../context/CartContext'
+import { API_BASE_URL } from '../utils/constants'
 
 export function Cart() {
   const {
@@ -65,7 +66,7 @@ export function Cart() {
         if (productIds.length > 0) {
           const responses = await Promise.all(
             productIds.map(id => 
-              axios.get(`http://localhost:4000/products/${id}`, {
+              axios.get(`${API_BASE_URL}/products/${id}`, {
                 headers: { Authorization: token ? `Bearer ${token}` : '' }
               })
             )
@@ -151,7 +152,7 @@ export function Cart() {
     try {
       const token = window.localStorage.getItem('revir_token')
       const res = await axios.get(
-        `http://localhost:4000/clients/by-cpf/${digits}`,
+        `${API_BASE_URL}/clients/by-cpf/${digits}`,
         { headers: { Authorization: token ? `Bearer ${token}` : '' } }
       )
       if (res.data && res.data.item) {
