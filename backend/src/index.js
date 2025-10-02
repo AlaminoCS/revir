@@ -32,6 +32,12 @@ app.use('/suppliers', suppliersRoutes)
 app.use('/purchases', purchasesRoutes)
 app.use('/sales', salesRoutes)
 
-app.listen(PORT, () => {
-  console.log(`Revir backend listening on port ${PORT}`)
-})
+// Export the app for Vercel
+module.exports = app
+
+// Only start server if not in Vercel environment
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Revir backend listening on port ${PORT}`)
+  })
+}

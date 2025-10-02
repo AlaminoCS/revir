@@ -5,7 +5,9 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "test:supabase": "node scripts/testSupabase.js"
+    "test:supabase": "node scripts/testSupabase.js",
+    "build": "echo 'No build step required'",
+    "vercel-build": "echo 'No build step required'"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.24.0",
